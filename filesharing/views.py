@@ -64,10 +64,10 @@ class FileUploadView(View):
         if any(ch not in FILENAME_CHARS for ch in metadata.name):
             raise ValueError('Filename contains forbbiden characters.')
 
-        if storage.exists(metadata.storage_id):
+        if storage.exists(metadata.storage_path):
             raise ValueError('File already exists.')
 
-        storage.save(metadata.storage_id, file_obj)
+        storage.save(metadata.storage_path, file_obj)
         metadata.save()
 
 
