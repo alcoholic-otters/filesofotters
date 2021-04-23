@@ -1,0 +1,16 @@
+<h1>Files of otters</h1>
+
+{% if messages %}
+<ul>
+  {% for message in messages %}
+  <li>{{ message }}</li>
+  {% endfor %}
+</ul>
+{% endif %}
+
+<form method="post" action="{% url 'filesharing:upload' %}" enctype="multipart/form-data" required>
+  {% csrf_token %}
+  <label for="the_file">Choose a file to upload:</label>
+  <input type="file" name="the_file">
+  <input type="submit" value="Upload">
+</form>
