@@ -1,18 +1,23 @@
 # Files of Otters - Ghid rapid
 
-## Instalați Django
+## Copiați credențialele de pe Whatsapp
+
+Trebuie să copiați fișierul la calea `~/.aws/credentials`.
+Probabil trebuie să creați voi folderul `.aws`.
+
+## Instalați Django și alte biblioteci
 
 ```bash
-pip install Django==3.2
+pip install -r requirements.txt
 ```
 
-Puteți citi și [aici](https://www.djangoproject.com/download/).
+Cred că am pus toate bibliotecile în fișier.
 
 ## Pregătiți proiectul local
 
 ```bash
-python3 manage.py makemigrations # Probabil zice că nu e nimic nou.
-python3 manage.py migrate        # Trebuie să arate niște ok-uri.
+# Configurați baza de date locală - trebuie să arate niște ok-uri.
+python3 manage.py migrate
 
 # Creați un cont administrator - e doar local la voi, dați ce date vreți.
 python3 manage.py createsuperuser
@@ -21,9 +26,11 @@ python3 manage.py createsuperuser
 python3 manage.py runserver
 ```
 
-Intrați în browser la `localhost:8000/filesharing`. Trebuie să vă dea `Hello, world.`.
+Intrați în browser la `localhost:8000/filesharing`. Trebuie să vă dea arate
+un formular de încărcat fișiere.
 
 Puteți accesa și site-ul de administratori la `localhost:8000/admin`.
+Aici vedeți ce fișiere știe serverul vostru că s-au salvat.
 
 ## Cum lucrăm - branch-uri
 
