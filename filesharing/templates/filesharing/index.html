@@ -14,3 +14,15 @@
   <input type="file" name="the_file">
   <input type="submit" value="Upload">
 </form>
+
+<h2>Available files</h2>
+<ul>
+  {% for file in files %}
+  <li>
+    <p>{{ file.name }}</p>
+    <p>{{ file.human_size }}</p>
+    <p><a href="{{ file.download_url }}" download>download</a></p>
+  </li>
+  <hr>
+  {% endfor %}
+</ul>

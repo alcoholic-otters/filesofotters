@@ -73,4 +73,7 @@ class FileUploadView(View):
 
 def index(request):
     """Shows the index page of the website."""
-    return render(request, 'filesharing/index.html', {})
+    context = {
+        'files': FileMetadata.objects.all(),
+    }
+    return render(request, 'filesharing/index.html', context)
