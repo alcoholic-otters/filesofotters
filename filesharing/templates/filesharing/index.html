@@ -22,6 +22,18 @@
     <p>{{ file.name }}</p>
     <p>{{ file.human_size }}</p>
     <p><a href="{{ file.download_url }}" download>download</a></p>
+
+    <!--
+    We use a form to send the delete command. Because HTML forms don't support
+    the DELETE method, the backend expects us to use a trick.
+    -->
+    <p>
+      <form method="post" action="{% url 'filesharing:delete' file.id %}">
+        {% csrf_token %}
+        <input type="hidden" name="_method" value="delete">
+        <input type="submit" value="DELETE">
+      </form>
+    </p>
   </li>
   <hr>
   {% endfor %}

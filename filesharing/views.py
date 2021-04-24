@@ -4,7 +4,7 @@ import string
 
 from django.contrib import messages
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views import View
 
@@ -69,6 +69,31 @@ class FileUploadView(View):
 
         storage.save(metadata.storage_path, file_obj)
         metadata.save()
+
+
+class FileDeleteView(View):
+    """A view used to download a file from the system."""
+
+    def dispatch(self, request, *args, **kwargs):
+        # Because HTML forms do not handle DELETE requests, we POST a form
+        # from the frontend, and submit an extra parameter to specify the
+        # HTTP method we really want.
+        # https://stackoverflow.com/questions/36455189/put-and-delete-django
+        method = self.request.POST.get('_method', '').lower()
+        if method == 'delete':
+            return self.delete(request, *args, **kwargs)
+
+        return super(FileDeleteView, self).dispatch(request, *args, **kwargs)
+
+    def delete(self, request, metadata_id, *_args, **_kwargs):
+        metadata = get_object_or_404(FileMetadata, pk=metadata_id)
+        storage = FileStorage()
+
+        storage.delete(metadata.storage_path) # Delete from external storage.
+        metadata.delete()                     # Delete local metadata.
+
+        messages.success(request, 'File deleted successfully.')
+        return HttpResponseRedirect(reverse('filesharing:index'))
 
 
 def index(request):
