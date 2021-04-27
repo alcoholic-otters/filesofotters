@@ -1,13 +1,13 @@
-html {
-    font-family: monospace;
+nav {
+    padding: .2rem;
 }
 
-main {
+nav > header {
     padding: 1rem 2vw;
 }
 
 section {
-    margin-top: 3rem;
+    margin-bottom: 3rem;
 }
 
 /* All this code is buggy and should be rewritten. */
@@ -20,11 +20,15 @@ section {
 }
 
 #upload-button {
-    background: transparent;
-    border: 3px solid green;
+    background: var(--bg2);
+    border: 2px solid var(--theme2);
     border-radius: 5px;
     font-size: 1.1em;
     padding: .3rem;
+}
+
+#upload-button:hover {
+    background: var(--theme1);
 }
 
 .status-list {
@@ -60,7 +64,7 @@ section {
 }
 
 .file-list-item {
-    border-bottom: 2px solid black;
+    border-bottom: 2px solid var(--dark1);
     display: grid;
     grid-template-columns: 75% 12.5% 6.25% 6.25%;
     align-items: center;
@@ -68,7 +72,7 @@ section {
 }
 
 .file-list-item:hover {
-    background: lightgrey;
+    background: var(--bg2);
 }
 
 .file-name {
@@ -89,7 +93,8 @@ section {
 }
 
 .download-button {
-    border: 3px solid green;
+    background: var(--bg2);
+    border: 2px solid var(--theme2);
     border-radius: 5px;
     margin: 0 auto;
     padding: .1rem;
@@ -98,7 +103,7 @@ section {
 }
 
 .download-button:hover {
-    background: blue;
+    background: #aeff00;
 }
 
 .download-icon {
@@ -123,7 +128,8 @@ section {
 }
 
 .delete-button {
-    border: 3px solid green;
+    background: var(--bg2);
+    border: 2px solid var(--theme2);
     border-radius: 5px;
     display: block;
     overflow: hidden;
@@ -132,7 +138,7 @@ section {
 }
 
 .delete-button:hover {
-    background: red;
+    background: #ff2800;
 }
 
 .delete-icon {

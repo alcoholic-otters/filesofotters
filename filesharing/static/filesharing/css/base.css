@@ -1,0 +1,40 @@
+:root {
+    --bg1: #fafafa;
+    --bg2: #eeeeee;
+    --theme1: #f05e23;
+    --theme2: #b80201;
+    --dark1: #212121;
+}
+
+html {
+    font-family: monospace;
+}
+
+body {
+    background-color: var(--bg1);
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    min-height: 100vh;
+}
+
+nav {
+    background-color: var(--theme1);
+}
+
+main {
+    display: block;
+    flex: 1 0 auto;
+    padding: 1rem 2vw;
+}
+
+footer {
+    background-color: black;
+    color: #fafafa;
+    font-size: 1.1em;
+    padding: 1rem 2vw;
+}
+
+footer a {
+    color: #bdbdbd;
+}

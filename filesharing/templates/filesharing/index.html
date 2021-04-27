@@ -8,13 +8,16 @@
 
   {% load static %}
   <link rel="stylesheet" type="text/css" href="{% static 'filesharing/css/normalize.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'filesharing/css/base.css' %}">
   <link rel="stylesheet" type="text/css" href="{% static 'filesharing/css/index.css' %}">
 </head>
 
 <body>
-  <main>
-    <h1>Files of Otters</h1>
+  <nav>
+    <header><h1>Files of Otters</h1></header>
+  </nav>
 
+  <main>
     <section>
       <h2># Upload a file</h2>
       <form id="upload-form" method="post" action="{% url 'filesharing:upload' %}" enctype="multipart/form-data">
