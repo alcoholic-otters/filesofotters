@@ -1,0 +1,115 @@
+html {
+    font-family: monospace;
+}
+
+main {
+    padding: 1rem 2vw;
+}
+
+/* All this code is buggy and should be rewritten. */
+
+#file-list-empty-message {
+    font-size: 1.1rem;
+}
+
+.file-list {
+    padding: 0;
+    list-style-type: none;
+}
+
+.file-list-item {
+    border-bottom: 2px solid black;
+    display: grid;
+    grid-template-columns: 75% 12.5% 6.25% 6.25%;
+    align-items: center;
+    padding: .1rem .5rem;
+}
+
+.file-list-item:hover {
+    background: lightgrey;
+}
+
+.file-name {
+    font-size: 1.1em;
+    font-weight: bold;
+    padding: 0 1rem;
+}
+
+.file-size {
+    padding: 0 1rem;
+    text-align: right;
+}
+
+.download-button-container {
+    align-items: center;
+    display: flex;
+    padding: .2rem;
+}
+
+.download-button {
+    border: 3px solid green;
+    border-radius: 5px;
+    margin: 0 auto;
+    padding: .1rem;
+    text-align: center;
+    width: 60%;
+}
+
+.download-button:hover {
+    background: blue;
+}
+
+.download-icon {
+    display: inline-block;
+    width: min(3em, 30px);
+}
+
+/*
+ * The names used for the delete button are kind of wrong.
+ * The clickable area is called "the icon".
+ */
+
+.delete-button-container {
+    align-items: center;
+    display: flex;
+}
+
+.delete-button-container form {
+    margin: 0 auto;
+    padding: 0;
+    width: 70%;
+}
+
+.delete-button {
+    border: 3px solid green;
+    border-radius: 5px;
+    display: block;
+    overflow: hidden;
+    padding: .1rem;
+    text-align: center;
+}
+
+.delete-button:hover {
+    background: red;
+}
+
+.delete-icon {
+    display: inline-block;
+    margin: 0 auto;
+    max-width: 100%;
+    width: min(3em, 30px);
+}
+
+@media only screen and (max-width: 1024px) {
+    .file-list-item {
+        grid-template-columns: 50% 25% 12.5% 12.5%;
+    }
+
+    .download-button {
+        width: 96%;
+    }
+
+    .delete-button-container form {
+        width: 96%;
+    }
+}

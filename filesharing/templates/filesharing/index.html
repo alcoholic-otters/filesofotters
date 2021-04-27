@@ -1,40 +1,78 @@
-<h1>Files of otters</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-{% if messages %}
-<ul>
-  {% for message in messages %}
-  <li>{{ message }}</li>
-  {% endfor %}
-</ul>
-{% endif %}
+  <title>Files of Otters - DEMO</title>
 
-<form method="post" action="{% url 'filesharing:upload' %}" enctype="multipart/form-data" required>
-  {% csrf_token %}
-  <label for="the_file">Choose a file to upload:</label>
-  <input type="file" name="the_file">
-  <input type="submit" value="Upload">
-</form>
+  {% load static %}
+  <link rel="stylesheet" type="text/css" href="{% static 'filesharing/css/normalize.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'filesharing/css/index.css' %}">
+</head>
 
-<h2>Available files</h2>
-<ul>
-  {% for file in files %}
-  <li>
-    <p>{{ file.name }}</p>
-    <p>{{ file.human_size }}</p>
-    <p><a href="{{ file.download_url }}" download>download</a></p>
+<body>
+  <main>
+    <h1>Files of Otters</h1>
 
-    <!--
-    We use a form to send the delete command. Because HTML forms don't support
-    the DELETE method, the backend expects us to use a trick.
-    -->
-    <p>
-      <form method="post" action="{% url 'filesharing:delete' file.id %}">
-        {% csrf_token %}
-        <input type="hidden" name="_method" value="delete">
-        <input type="submit" value="DELETE">
-      </form>
-    </p>
-  </li>
-  <hr>
-  {% endfor %}
-</ul>
+    {% if messages %}
+    <ul>
+      {% for message in messages %}
+      <li>{{ message }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+
+    <form method="post" action="{% url 'filesharing:upload' %}" enctype="multipart/form-data" required>
+      {% csrf_token %}
+      <label for="the_file">Choose a file to upload:</label>
+      <input type="file" name="the_file">
+      <input type="submit" value="Upload">
+    </form>
+
+    <h2># Available files</h2>
+    {% if files %}
+    <ul class="file-list">
+      {% for file in files %}
+      <li class="file-list-item">
+        <div class="file-name"><p>{{ file.name }}</p></div>
+        <div class="file-size"><p>{{ file.human_size }}</p></div>
+        <div class="download-button-container">
+          <a class="download-button" href="{{ file.download_url }}" download>
+            <img class="download-icon" src="{% static 'filesharing/images/download.png' %}" alt="Download icon">
+          </a>
+        </div>
+
+        <div class="delete-button-container" >
+          <!--
+          We use a form to send the delete command. Because HTML forms don't support
+          the DELETE method, the backend expects us to use a trick.
+          -->
+          <form method="post" action="{% url 'filesharing:delete' file.id %}">
+            {% csrf_token %}
+            <input type="hidden" name="_method" value="delete">
+            <div class="delete-button">
+              <input type="image" alt="DELETE" class="delete-icon" src="{% static 'filesharing/images/delete.png' %}">
+            </div>
+          </form>
+        </div>
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p id="file-list-empty-message">No files found.</p>
+    {% endif %}
+  </main>
+
+  <footer>
+    <div>
+      Icons made by <a href="https://creativemarket.com/Becris" title="Becris">Becris</a>
+      from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
+    </div>
+    <div>
+      Icons made by <a href="https://www.flaticon.com/authors/bqlqn" title="bqlqn">bqlqn</a>
+      from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
+    </div>
+  </footer>
+</body>
+</html>
