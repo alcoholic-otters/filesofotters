@@ -15,6 +15,14 @@
   <main>
     <h1>Files of Otters</h1>
 
+    <h2># Upload a file</h2>
+    <form id="upload-form" method="post" action="{% url 'filesharing:upload' %}" enctype="multipart/form-data">
+      {% csrf_token %}
+      <label for="the_file">Choose a file:</label>
+      <input type="file" name="the_file" required>
+      <input id="upload-button" type="submit" value="Upload">
+    </form>
+
     {% if messages %}
     <ul>
       {% for message in messages %}
@@ -22,13 +30,6 @@
       {% endfor %}
     </ul>
     {% endif %}
-
-    <form method="post" action="{% url 'filesharing:upload' %}" enctype="multipart/form-data" required>
-      {% csrf_token %}
-      <label for="the_file">Choose a file to upload:</label>
-      <input type="file" name="the_file">
-      <input type="submit" value="Upload">
-    </form>
 
     <h2># Available files</h2>
     {% if files %}
