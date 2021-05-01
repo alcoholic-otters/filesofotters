@@ -1,0 +1,171 @@
+nav {
+    padding: .2rem;
+}
+
+nav > header {
+    padding: 1rem 2vw;
+}
+
+section {
+    margin-bottom: 3rem;
+}
+
+/* All this code is buggy and should be rewritten. */
+
+#upload-form {
+}
+
+#upload-form label {
+    font-size: 1.1em;
+}
+
+#upload-button {
+    background: var(--bg2);
+    border: 2px solid var(--theme2);
+    border-radius: 5px;
+    font-size: 1.1em;
+    padding: .3rem;
+}
+
+#upload-button:hover {
+    background: var(--theme1);
+}
+
+.status-list {
+    list-style-type: none;
+    padding-inline-start: 0;
+}
+
+.status-list > li {
+    border-radius: 3px;
+    border-style: solid;
+    border-width: 2px;
+    padding: 1rem .5rem;
+    margin-bottom: .2rem;
+}
+
+.error {
+    background: #fad2cc;
+    border-color: #ff4838;
+}
+
+.success {
+    background: #c2edce;
+    border-color: #388087;
+}
+
+#file-list-empty-message {
+    font-size: 1.1em;
+}
+
+.file-list {
+    padding: 0;
+    list-style-type: none;
+}
+
+.file-list-item {
+    border-bottom: 2px solid var(--dark1);
+    display: grid;
+    grid-template-columns: 75% 12.5% 6.25% 6.25%;
+    align-items: center;
+    padding: .1rem .5rem;
+}
+
+.file-list-item:hover {
+    background: var(--bg2);
+}
+
+.file-name {
+    font-size: 1.1em;
+    font-weight: bold;
+    padding: 0 1rem;
+}
+
+.file-size {
+    padding: 0 1rem;
+    text-align: right;
+}
+
+.download-button-container {
+    align-items: center;
+    display: flex;
+    padding: .2rem;
+}
+
+.download-button {
+    background: var(--bg2);
+    border: 2px solid var(--theme2);
+    border-radius: 5px;
+    margin: 0 auto;
+    padding: .1rem;
+    text-align: center;
+    width: 60%;
+}
+
+.download-button:hover {
+    background: #aeff00;
+}
+
+.download-icon {
+    display: inline-block;
+    width: min(3em, 30px);
+}
+
+/*
+ * The names used for the delete button are kind of wrong.
+ * The clickable area is called "the icon".
+ */
+
+.delete-button-container {
+    align-items: center;
+    display: flex;
+}
+
+.delete-button-container form {
+    margin: 0 auto;
+    padding: 0;
+    width: 70%;
+}
+
+.delete-button {
+    background: var(--bg2);
+    border: 2px solid var(--theme2);
+    border-radius: 5px;
+    display: block;
+    overflow: hidden;
+    padding: .1rem;
+    text-align: center;
+}
+
+.delete-button:hover {
+    background: #ff2800;
+}
+
+.delete-icon {
+    display: inline-block;
+    margin: 0 auto;
+    max-width: 100%;
+    width: min(3em, 30px);
+}
+
+@media only screen and (max-width: 1024px) {
+    .file-list-item {
+        grid-template-columns: 50% 25% 12.5% 12.5%;
+    }
+
+    .download-button {
+        width: 96%;
+    }
+
+    .delete-button-container form {
+        width: 96%;
+    }
+}
+
+@media only screen and (max-width: 500px) {
+    #upload-form {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        grid-gap: 1rem;
+    }
+}
