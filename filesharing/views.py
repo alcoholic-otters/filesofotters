@@ -9,7 +9,7 @@ from django.urls import reverse
 from django.views import View
 
 from .file_storage import FileStorage
-from .forms import FileUploadForm
+from .forms import FileUploadForm, NewUserForm
 from .models import FileMetadata
 
 
@@ -94,6 +94,26 @@ class FileDeleteView(View):
 
         messages.success(request, 'File deleted successfully.')
         return HttpResponseRedirect(reverse('filesharing:index'))
+
+
+class RegisterView(View):
+    """A view used to register new user accounts."""
+
+    def get(self, request, *_args, **_kwargs):
+        return render(request, 'filesharing/register.html', {})
+
+    def post(self, request, *_args, **_kwargs):
+        form = NewUserForm(request.POST)
+        if not form.is_valid():
+            for (field, reasons) in form.errors.items():
+                for reason in reasons:
+                    messages.error(request, field + ': ' + reason)
+            return HttpResponseRedirect(reverse('filesharing:register'))
+
+        form.save()
+
+        messages.success(request, 'Registration successful')
+        return HttpResponseRedirect(reverse('filesharing:register'))
 
 
 def index(request):
