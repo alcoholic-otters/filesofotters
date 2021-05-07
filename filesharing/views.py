@@ -3,7 +3,7 @@
 import string
 
 from django.contrib import messages
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
@@ -137,6 +137,15 @@ class LoginView(View):
         login(request, user)
 
         return HttpResponseRedirect(reverse('filesharing:index'))
+
+
+class LogoutView(View):
+    """A view used to log a user out."""
+
+    def post(self, request, *_args, **_kwargs):
+        logout(request)
+
+        return HttpResponseRedirect(reverse('filesharing:login'))
 
 
 @login_required

@@ -19,7 +19,11 @@
 
   <main>
     <section>
-        You are logged in as '<strong>{{ user.username }}</strong>'.
+      You are logged in as '<strong>{{ user.username }}</strong>'.
+      <form method="post" action="{% url 'filesharing:logout' %}">
+        {% csrf_token %}
+        <input type="submit" value="Log out">
+      </form>
     </section>
 
     <section>
