@@ -3,6 +3,9 @@
 import string
 
 from django.contrib import messages
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
@@ -23,7 +26,7 @@ MAX_FILENAME_LENGTH = 128
 FILENAME_CHARS = string.ascii_letters + string.digits + '-_.'
 
 
-class FileUploadView(View):
+class FileUploadView(LoginRequiredMixin, View):
     """A view used to upload a file to the system."""
 
     def post(self, request, *_args, **_kwargs):
@@ -71,7 +74,7 @@ class FileUploadView(View):
         metadata.save()
 
 
-class FileDeleteView(View):
+class FileDeleteView(LoginRequiredMixin, View):
     """A view used to download a file from the system."""
 
     def dispatch(self, request, *args, **kwargs):
@@ -116,9 +119,31 @@ class RegisterView(View):
         return HttpResponseRedirect(reverse('filesharing:register'))
 
 
+class LoginView(View):
+    """A view used to log into an account."""
+
+    def get(self, request, *_args, **_kwargs):
+        return render(request, 'filesharing/login.html', {})
+
+    def post(self, request, *_args, **_kwargs):
+        username = request.POST['username']
+        password = request.POST['password']
+
+        user = authenticate(request, username=username, password=password)
+        if user is None:
+            messages.error(request, 'Invalid credentials.')
+            return HttpResponseRedirect(reverse('filesharing:login'))
+
+        login(request, user)
+
+        return HttpResponseRedirect(reverse('filesharing:index'))
+
+
+@login_required
 def index(request):
     """Shows the index page of the website."""
     context = {
         'files': FileMetadata.objects.all(),
+        'user': request.user,
     }
     return render(request, 'filesharing/index.html', context)

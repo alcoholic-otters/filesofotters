@@ -19,6 +19,10 @@
 
   <main>
     <section>
+        You are logged in as '<strong>{{ user.username }}</strong>'.
+    </section>
+
+    <section>
       <h2># Upload a file</h2>
       <form id="upload-form" method="post" action="{% url 'filesharing:upload' %}" enctype="multipart/form-data">
         {% csrf_token %}
