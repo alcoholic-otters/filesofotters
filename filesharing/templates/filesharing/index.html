@@ -19,6 +19,14 @@
 
   <main>
     <section>
+      You are logged in as '<strong>{{ user.username }}</strong>'.
+      <form method="post" action="{% url 'filesharing:logout' %}">
+        {% csrf_token %}
+        <input type="submit" value="Log out">
+      </form>
+    </section>
+
+    <section>
       <h2># Upload a file</h2>
       <form id="upload-form" method="post" action="{% url 'filesharing:upload' %}" enctype="multipart/form-data">
         {% csrf_token %}

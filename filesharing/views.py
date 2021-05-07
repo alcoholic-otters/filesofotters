@@ -3,13 +3,16 @@
 import string
 
 from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views import View
 
 from .file_storage import FileStorage
-from .forms import FileUploadForm
+from .forms import FileUploadForm, NewUserForm
 from .models import FileMetadata
 
 
@@ -23,7 +26,7 @@ MAX_FILENAME_LENGTH = 128
 FILENAME_CHARS = string.ascii_letters + string.digits + '-_.'
 
 
-class FileUploadView(View):
+class FileUploadView(LoginRequiredMixin, View):
     """A view used to upload a file to the system."""
 
     def post(self, request, *_args, **_kwargs):
@@ -34,7 +37,7 @@ class FileUploadView(View):
 
         try:
             file_obj = request.FILES['the_file']
-            FileUploadView.save_and_store(file_obj)
+            FileUploadView.save_and_store(request, file_obj)
         except ValueError as err:
             messages.error(request, str(err))
         else:
@@ -43,7 +46,7 @@ class FileUploadView(View):
         return HttpResponseRedirect(reverse('filesharing:index'))
 
     @staticmethod
-    def save_and_store(file_obj):
+    def save_and_store(request, file_obj):
         """Try to save a new file into the system.
 
         Checks if the given parameter is a valid, new file.
@@ -52,7 +55,7 @@ class FileUploadView(View):
         If the function succeeds, the file will be uploaded to the file-storage
         service and its metadata will be saved in our local database.
         """
-        metadata = FileMetadata.from_file(file_obj)
+        metadata = FileMetadata.from_file(file_obj, request.user)
         storage = FileStorage()
 
         if file_obj.size > MAX_ALLOWED_FILE_SIZE:
@@ -71,7 +74,7 @@ class FileUploadView(View):
         metadata.save()
 
 
-class FileDeleteView(View):
+class FileDeleteView(LoginRequiredMixin, View):
     """A view used to download a file from the system."""
 
     def dispatch(self, request, *args, **kwargs):
@@ -96,9 +99,63 @@ class FileDeleteView(View):
         return HttpResponseRedirect(reverse('filesharing:index'))
 
 
+class RegisterView(View):
+    """A view used to register new user accounts."""
+
+    def get(self, request, *_args, **_kwargs):
+        return render(request, 'filesharing/register.html', {})
+
+    def post(self, request, *_args, **_kwargs):
+        form = NewUserForm(request.POST)
+        if not form.is_valid():
+            for (field, reasons) in form.errors.items():
+                for reason in reasons:
+                    messages.error(request, field + ': ' + reason)
+            return HttpResponseRedirect(reverse('filesharing:register'))
+
+        form.save()
+
+        messages.success(request, 'Registration successful')
+        return HttpResponseRedirect(reverse('filesharing:register'))
+
+
+class LoginView(View):
+    """A view used to log into an account."""
+
+    def get(self, request, *_args, **_kwargs):
+        return render(request, 'filesharing/login.html', {})
+
+    def post(self, request, *_args, **_kwargs):
+        username = request.POST['username']
+        password = request.POST['password']
+
+        user = authenticate(request, username=username, password=password)
+        if user is None:
+            messages.error(request, 'Invalid credentials.')
+            return HttpResponseRedirect(reverse('filesharing:login'))
+
+        login(request, user)
+
+        return HttpResponseRedirect(reverse('filesharing:index'))
+
+
+class LogoutView(View):
+    """A view used to log a user out."""
+
+    def post(self, request, *_args, **_kwargs):
+        logout(request)
+
+        return HttpResponseRedirect(reverse('filesharing:login'))
+
+
+@login_required
 def index(request):
     """Shows the index page of the website."""
     context = {
-        'files': FileMetadata.objects.all(),
+        'files': filter(
+            lambda metadata: metadata.visible(request.user),
+            FileMetadata.objects.all(),
+        ),
+        'user': request.user,
     }
     return render(request, 'filesharing/index.html', context)
