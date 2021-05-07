@@ -37,7 +37,7 @@ class FileUploadView(LoginRequiredMixin, View):
 
         try:
             file_obj = request.FILES['the_file']
-            FileUploadView.save_and_store(file_obj)
+            FileUploadView.save_and_store(request, file_obj)
         except ValueError as err:
             messages.error(request, str(err))
         else:
@@ -46,7 +46,7 @@ class FileUploadView(LoginRequiredMixin, View):
         return HttpResponseRedirect(reverse('filesharing:index'))
 
     @staticmethod
-    def save_and_store(file_obj):
+    def save_and_store(request, file_obj):
         """Try to save a new file into the system.
 
         Checks if the given parameter is a valid, new file.
@@ -55,7 +55,7 @@ class FileUploadView(LoginRequiredMixin, View):
         If the function succeeds, the file will be uploaded to the file-storage
         service and its metadata will be saved in our local database.
         """
-        metadata = FileMetadata.from_file(file_obj)
+        metadata = FileMetadata.from_file(file_obj, request.user)
         storage = FileStorage()
 
         if file_obj.size > MAX_ALLOWED_FILE_SIZE:
@@ -152,7 +152,10 @@ class LogoutView(View):
 def index(request):
     """Shows the index page of the website."""
     context = {
-        'files': FileMetadata.objects.all(),
+        'files': filter(
+            lambda metadata: metadata.visible(request.user),
+            FileMetadata.objects.all(),
+        ),
         'user': request.user,
     }
     return render(request, 'filesharing/index.html', context)
