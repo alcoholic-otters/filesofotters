@@ -10,6 +10,15 @@ from .file_storage import FileStorage
 URL_EXPIRE = 2 * 60
 
 
+class Tag(models.Model):
+    """A tag associated with a file, used for searching."""
+
+    name = models.CharField(max_length=32, unique=True)
+
+    def __str__(self):
+        return self.name
+
+
 class FileMetadata(models.Model):
     """The metadata we store locally about a file."""
 
@@ -19,6 +28,7 @@ class FileMetadata(models.Model):
     owner = models.ForeignKey(
         User, on_delete=models.CASCADE, null=True, blank=True
     )
+    tags = models.ManyToManyField(Tag, 'file_set')
 
     def __str__(self):
         return self.name

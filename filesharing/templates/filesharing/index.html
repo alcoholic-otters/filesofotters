@@ -27,14 +27,6 @@
     </section>
 
     <section>
-      <h2># Upload a file</h2>
-      <form id="upload-form" method="post" action="{% url 'filesharing:upload' %}" enctype="multipart/form-data">
-        {% csrf_token %}
-        <label for="the_file">Choose a file:</label>
-        <input type="file" name="the_file" required>
-        <input id="upload-button" type="submit" value="Upload">
-      </form>
-
       {% if messages %}
       <ul class="status-list">
         {% for message in messages %}
@@ -45,7 +37,63 @@
     </section>
 
     <section>
+      <h2># Manage tags</h2>
+      <form method="post" action="{% url 'filesharing:tag-create' %}">
+        {% csrf_token %}
+        <label for="name">Tag name:</label>
+        <input type="text" name="name" required>
+        <input type="submit" value="Add">
+      </form>
+
+      <h3># Available tags</h3>
+      <ul>
+        {% for tag in tags %}
+        <li>
+          {{ tag }}
+          <a href="{% url 'filesharing:tag-delete' tag.id %}">
+            <button>Delete</button>
+          </a>
+        </li>
+        {% endfor %}
+      </ul>
+    </section>
+
+    <section>
+      <h2># Upload a file</h2>
+      <form id="upload-form" method="post" action="{% url 'filesharing:upload' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="the_file">Choose a file:</label>
+        <input type="file" name="the_file" required>
+
+        <label for="tags">Choose tags:</label>
+        <select name="tags" multiple>
+          {% for tag in tags %}
+          <option value="{{ tag.id }}">{{ tag.name }}</option>
+          {% endfor %}
+        </select>
+
+        <input id="upload-button" type="submit" value="Upload">
+      </form>
+    </section>
+
+    <section>
       <h2># Available files</h2>
+
+      <form method="post" action="{% url 'filesharing:search' %}">
+        {% csrf_token %}
+        <label for="search">Search by name:</label>
+        <input type="text" name="search">
+
+        <label for="search_tags">Choose tags:</label>
+        <select name="search_tags" multiple>
+          {% for tag in tags %}
+          <option value="{{ tag.id }}">{{ tag.name }}</option>
+          {% endfor %}
+        </select>
+
+        <input type="submit" value="Search">
+      </form>
+
       {% if files %}
       <ul class="file-list">
         {% for file in files %}
@@ -71,6 +119,11 @@
               </div>
             </form>
           </div>
+          <ul>
+            {% for tag in file.tags.all %}
+            <li>#{{ tag.name }}</li>
+            {% endfor %}
+          </ul>
         </li>
         {% endfor %}
       </ul>
