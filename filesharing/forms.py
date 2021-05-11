@@ -2,6 +2,7 @@
 
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
+from django.core.exceptions import ValidationError
 
 from .models import Tag
 
@@ -24,3 +25,12 @@ class TagCreateForm(forms.ModelForm):
     class Meta:
         model = Tag
         fields = ('name',)
+
+    def clean_name(self):
+        # Characters not allowed in tag names for certain reasons.
+        FORBIDDEN = '<>$"\' \t'
+
+        name = self.cleaned_data['name']
+        if any(ch in name for ch in FORBIDDEN):
+            raise ValidationError('Tag name contains invalid characters.')
+        return name

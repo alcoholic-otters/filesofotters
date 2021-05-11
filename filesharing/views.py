@@ -173,9 +173,9 @@ class TagDeleteView(LoginRequiredMixin, View):
     """A view used to delete an existing tag."""
 
     def get(self, _request, *_args, **kwargs):
-        object = Tag.objects.get(id=kwargs.get('id'))
-        if object:
-            object.delete()
+        tag = Tag.objects.get(id=kwargs.get('id'))
+        if tag:
+            tag.delete()
 
         return HttpResponseRedirect(reverse('filesharing:index'))
 
