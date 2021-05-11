@@ -11,7 +11,7 @@ class FileUploadForm(forms.Form):
     """The form used to upload a file."""
 
     the_file = forms.FileField()
-    tags = forms.ModelMultipleChoiceField(Tag.objects.all())
+    tags = forms.ModelMultipleChoiceField(Tag.objects.all(), required=False)
 
 
 # We do not use `UserCreationForm` directly, in case we'll want to customize it.
