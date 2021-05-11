@@ -38,7 +38,7 @@ Aici vedeți ce fișiere știe serverul vostru că s-au salvat.
 Eu zic să facem câte un branch pentru fiecare etapă și să lucrăm pe el. Îi
 dăm merge pe `main` abia la finalul etapei. Deci acum vom lucra pe `sprint2`.
 
-Aduceți branch-ul pe local: `git checkout -b sprint1 origin/sprint2`.
+Aduceți branch-ul pe local: `git checkout -b sprint2 origin/sprint2`.
 
 Din `sprint2` vom face câte un branch pentru fiecare feature pe care îl scriem,
 de exemplu `add-groups`. Când terminăm de implementat feature-ul, dăm pull
