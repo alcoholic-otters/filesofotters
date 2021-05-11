@@ -12,8 +12,8 @@ from django.urls import reverse
 from django.views import View
 
 from .file_storage import FileStorage
-from .forms import FileUploadForm, NewUserForm, TagCreateForm
-from .models import FileMetadata, Tag
+from .forms import FileUploadForm, GroupCreateForm, NewUserForm, TagCreateForm
+from .models import FileMetadata, Tag, UserGroup
 
 
 # The maximum size, in bytes, allowed for uploaded files.
@@ -153,6 +153,51 @@ class LogoutView(View):
         return HttpResponseRedirect(reverse('filesharing:login'))
 
 
+class ManageGroupsView(LoginRequiredMixin, View):
+    """A view used to manage a user's groups."""
+
+    def get(self, request, *_args, **_kwargs):
+        visible = lambda group: group.owner == request.user
+
+        context = {
+            'groups': list(filter(visible, UserGroup.objects.all())),
+        }
+        return render(request, 'filesharing/groups.html', context)
+
+
+class GroupCreateView(LoginRequiredMixin, View):
+    """A view used to create a new group."""
+
+    def post(self, request, *_args, **_kwargs):
+        form = GroupCreateForm(request.POST)
+        if not form.is_valid():
+            for reasons in form.errors.values():
+                for reason in reasons:
+                    messages.error(request, reason)
+            return HttpResponseRedirect(reverse('filesharing:manage-groups'))
+
+        try:
+            group = UserGroup.of_user(request.user, form.cleaned_data['name'])
+            group.save()
+            messages.success(request, 'Group created successfully.')
+        except Exception as e:
+            messages.error(request, e)
+
+        return HttpResponseRedirect(reverse('filesharing:manage-groups'))
+
+
+class GroupDeleteView(LoginRequiredMixin, View):
+    """A view used to delete an existing group."""
+
+    def get(self, request, *_args, **kwargs):
+        group = UserGroup.objects.get(id=kwargs.get('id'))
+        if group and group.owner == request.user:
+            group.delete()
+            messages.success(request, 'Group deleted successfully.')
+
+        return HttpResponseRedirect(reverse('filesharing:manage-groups'))
+
+
 class TagCreateView(LoginRequiredMixin, View):
     """A view used to create a new tag."""
 
@@ -215,5 +260,6 @@ def index(request):
         'files': files,
         'user': request.user,
         'tags': Tag.objects.all(),
+        'groups': UserGroup.objects.all(),
     }
     return render(request, 'filesharing/index.html', context)

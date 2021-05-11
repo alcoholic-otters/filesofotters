@@ -24,6 +24,9 @@
         {% csrf_token %}
         <input type="submit" value="Log out">
       </form>
+      <hr>
+      <a href="{% url 'filesharing:manage-groups' %}"><button>Manage groups</button></a>
+      <hr>
     </section>
 
     <section>

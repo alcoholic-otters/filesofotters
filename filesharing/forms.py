@@ -19,6 +19,21 @@ class NewUserForm(UserCreationForm):
     """The form used to register a new user account."""
 
 
+class GroupCreateForm(forms.Form):
+    """The form used to create a new group."""
+
+    name = forms.CharField(max_length=128)
+
+    def clean_name(self):
+        # Characters not allowed in group names for certain reasons.
+        FORBIDDEN = '<>$"\' \t'
+
+        name = self.cleaned_data['name']
+        if any(ch in name for ch in FORBIDDEN):
+            raise ValidationError('Group name contains invalid characters.')
+        return name
+
+
 class TagCreateForm(forms.ModelForm):
     """The form used to create a new tag."""
 

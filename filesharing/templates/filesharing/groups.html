@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Files of Otters - DEMO</title>
+
+  {% load static %}
+  <link rel="stylesheet" type="text/css" href="{% static 'filesharing/css/normalize.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'filesharing/css/base.css' %}">
+</head>
+
+<body>
+  <nav>
+    <header><h1>Files of Otters</h1></header>
+  </nav>
+  <section>
+    You are logged in as '<strong>{{ user.username }}</strong>'.
+    <form method="post" action="{% url 'filesharing:logout' %}">
+      {% csrf_token %}
+      <input type="submit" value="Log out">
+    </form>
+    <hr>
+    <a href="{% url 'filesharing:index' %}"><button>Go back</button></a>
+    <hr>
+  </section>
+
+  <section>
+    {% if messages %}
+    <ul class="status-list">
+      {% for message in messages %}
+      <li class="{{ message.tags }}">{{ message }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+  </section>
+
+  <section>
+    <h2>Create a group</h2>
+    <form method="post" action="{% url 'filesharing:group-create' %}">
+      {% csrf_token %}
+      <label for="name">Group name:</label>
+      <input type="text" name="name" required>
+      <input type="submit" value="Create">
+    </form>
+  </section>
+
+  <section>
+    <h2>Your groups</h2>
+    {% if groups %}
+    <ul>
+    {% for group in groups %}
+      <li>
+        {{ group.display_name }}
+        <a href="{% url 'filesharing:group-delete' group.id %}">
+          <button>Delete</button>
+        </a>
+      </li>
+    {% endfor %}
+    </ul>
+    {% else %}
+    <p>You don't have any groups.</p>
+    {% endif %}
+  </section>
+</body>
+</html>

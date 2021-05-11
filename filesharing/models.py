@@ -1,7 +1,7 @@
 """This module contains models for the filesharing app."""
 
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import Group, User
 
 from .file_storage import FileStorage
 
@@ -17,6 +17,43 @@ class Tag(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class UserGroup(Group):
+    """A group of users, used for setting the visibility of files."""
+
+    # The separator string used to separate the username from the group name.
+    # This allows different users to think they have groups with the same name.
+    SEPARATOR = '<>'
+
+    class Meta:
+        proxy = True
+
+    @classmethod
+    def internal_name(_cls, user, name):
+        """The real group name used in the database."""
+        return f'{user.username}{UserGroup.SEPARATOR}{name}'
+
+    @classmethod
+    def of_user(cls, user, name):
+        """Creates a new group belonging to a given user."""
+        name = cls.internal_name(user, name)
+        return cls.objects.create(name=name)
+
+    @property
+    def display_name(self):
+        """The group name which should be seen by users."""
+        return self.name.split(UserGroup.SEPARATOR)[1]
+
+    @property
+    def owner_name(self):
+        """The name of the group owner."""
+        return self.name.split(UserGroup.SEPARATOR)[0]
+
+    @property
+    def owner(self):
+        """The group owner object."""
+        return User.objects.get(username=self.owner_name)
 
 
 class FileMetadata(models.Model):
