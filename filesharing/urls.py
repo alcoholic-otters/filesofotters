@@ -12,4 +12,5 @@ urlpatterns = [
     path('logout/', views.LogoutView.as_view(), name='logout'),
     path('tag/create/', views.TagCreateView.as_view(), name='tag-create'),
     path('tag/delete/<int:id>/', views.TagDeleteView.as_view(), name='tag-delete'),
+    path('search/', views.FileSearchView.as_view(), name='search'),
 ]

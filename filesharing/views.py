@@ -180,14 +180,39 @@ class TagDeleteView(LoginRequiredMixin, View):
         return HttpResponseRedirect(reverse('filesharing:index'))
 
 
+class FileSearchView(View):
+    """A view used for searching files."""
+
+    def post(self, request, *_args, **_kwargs):
+        search = request.POST.get('search')
+        tag_ids = request.POST.getlist('search_tags')
+
+        return HttpResponseRedirect(
+            f'{reverse("filesharing:index")}?search={search}&tags={",".join(tag_ids)}'
+        )
+
+
 @login_required
 def index(request):
     """Shows the index page of the website."""
+    search = request.GET.get('search', '')
+    tag_ids = request.GET.get('tags', '')
+
+    files = FileMetadata.objects.all()
+
+    # Keep only the files the user searched for.
+    if search:
+        files = files.filter(name__icontains=search)
+    if tag_ids:
+        tag_ids = list(map(int, tag_ids.split(',')))
+        files = files.filter(tags__in=tag_ids).distinct() # Check this.
+
+    # Keep only files the user is allowed to see.
+    visible_to_user = lambda metadata: metadata.visible(request.user)
+    files = list(filter(visible_to_user, files))
+
     context = {
-        'files': list(filter(
-            lambda metadata: metadata.visible(request.user),
-            FileMetadata.objects.all(),
-        )),
+        'files': files,
         'user': request.user,
         'tags': Tag.objects.all(),
     }
