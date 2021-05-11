@@ -12,8 +12,8 @@ from django.urls import reverse
 from django.views import View
 
 from .file_storage import FileStorage
-from .forms import FileUploadForm, NewUserForm
-from .models import FileMetadata
+from .forms import FileUploadForm, NewUserForm, TagCreateForm
+from .models import FileMetadata, Tag
 
 
 # The maximum size, in bytes, allowed for uploaded files.
@@ -36,8 +36,10 @@ class FileUploadView(LoginRequiredMixin, View):
             return HttpResponseRedirect(reverse('filesharing:index'))
 
         try:
+            user = request.user
             file_obj = request.FILES['the_file']
-            FileUploadView.save_and_store(request, file_obj)
+            tags = form.cleaned_data.get('tags', [])
+            FileUploadView.save_and_store(user, file_obj, tags)
         except ValueError as err:
             messages.error(request, str(err))
         else:
@@ -46,7 +48,7 @@ class FileUploadView(LoginRequiredMixin, View):
         return HttpResponseRedirect(reverse('filesharing:index'))
 
     @staticmethod
-    def save_and_store(request, file_obj):
+    def save_and_store(user, file_obj, tags):
         """Try to save a new file into the system.
 
         Checks if the given parameter is a valid, new file.
@@ -55,7 +57,7 @@ class FileUploadView(LoginRequiredMixin, View):
         If the function succeeds, the file will be uploaded to the file-storage
         service and its metadata will be saved in our local database.
         """
-        metadata = FileMetadata.from_file(file_obj, request.user)
+        metadata = FileMetadata.from_file(file_obj, user)
         storage = FileStorage()
 
         if file_obj.size > MAX_ALLOWED_FILE_SIZE:
@@ -71,7 +73,10 @@ class FileUploadView(LoginRequiredMixin, View):
             raise ValueError('File already exists.')
 
         storage.save(metadata.storage_path, file_obj)
-        metadata.save()
+
+        metadata.save()         # Save metadata to get an ID.
+        metadata.tags.set(tags)
+        metadata.save()         # Save with tags.
 
 
 class FileDeleteView(LoginRequiredMixin, View):
@@ -148,14 +153,42 @@ class LogoutView(View):
         return HttpResponseRedirect(reverse('filesharing:login'))
 
 
+class TagCreateView(LoginRequiredMixin, View):
+    """A view used to create a new tag."""
+
+    def post(self, request, *_args, **_kwargs):
+        form = TagCreateForm(request.POST)
+        if not form.is_valid():
+            for reasons in form.errors.values():
+                for reason in reasons:
+                    messages.error(request, reason)
+            return HttpResponseRedirect(reverse('filesharing:index'))
+
+        form.save()
+
+        messages.success(request, 'New tag created.')
+        return HttpResponseRedirect(reverse('filesharing:index'))
+
+class TagDeleteView(LoginRequiredMixin, View):
+    """A view used to delete an existing tag."""
+
+    def get(self, _request, *_args, **kwargs):
+        object = Tag.objects.get(id=kwargs.get('id'))
+        if object:
+            object.delete()
+
+        return HttpResponseRedirect(reverse('filesharing:index'))
+
+
 @login_required
 def index(request):
     """Shows the index page of the website."""
     context = {
-        'files': filter(
+        'files': list(filter(
             lambda metadata: metadata.visible(request.user),
             FileMetadata.objects.all(),
-        ),
+        )),
         'user': request.user,
+        'tags': Tag.objects.all(),
     }
     return render(request, 'filesharing/index.html', context)
