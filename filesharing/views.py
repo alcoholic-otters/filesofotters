@@ -6,6 +6,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
@@ -180,8 +181,8 @@ class GroupCreateView(LoginRequiredMixin, View):
             group = UserGroup.of_user(request.user, form.cleaned_data['name'])
             group.save()
             messages.success(request, 'Group created successfully.')
-        except Exception as e:
-            messages.error(request, e)
+        except Exception as err:
+            messages.error(request, err)
 
         return HttpResponseRedirect(reverse('filesharing:manage-groups'))
 
@@ -196,6 +197,78 @@ class GroupDeleteView(LoginRequiredMixin, View):
             messages.success(request, 'Group deleted successfully.')
 
         return HttpResponseRedirect(reverse('filesharing:manage-groups'))
+
+
+class GroupMemberAddView(LoginRequiredMixin, View):
+    """A view used to add a new member to a group."""
+
+    def post(self, request, *_args, **_kwargs):
+        group_id = request.POST['group_id']
+        username = request.POST['username']
+
+        try:
+            GroupMemberAddView.add_to_group(request.user, group_id, username)
+            messages.success(request, 'Member added.')
+        except ValueError as err:
+            messages.error(request, err)
+
+        return HttpResponseRedirect(reverse('filesharing:manage-groups'))
+
+    @staticmethod
+    def add_to_group(user, group_id, username):
+        """Add a user to a group.
+
+        If the operation fails, it raises an error with a human-readable reason.
+        """
+        group = UserGroup.objects.filter(pk=group_id).first()
+        if not group:
+            raise ValueError('Group does not exist.')
+        if group.owner != user:
+            raise ValueError('You are not the owner of the group.')
+
+        member = User.objects.filter(username=username).first()
+        if not member:
+            raise ValueError('No such user.')
+        if member == user:
+            raise ValueError('You cannot add yourself to a group.')
+
+        group.user_set.add(member)
+        group.save()
+
+
+class GroupMemberRemoveView(LoginRequiredMixin, View):
+    """A view used to remove a user from a group."""
+
+    def get(self, request, *_args, **kwargs):
+        id = kwargs.get('id')
+        username = kwargs.get('username')
+
+        try:
+            GroupMemberRemoveView.remove_from_group(request.user, id, username)
+            messages.success(request, 'Removed user from group.')
+        except ValueError as err:
+            messages.error(request, err)
+
+        return HttpResponseRedirect(reverse('filesharing:manage-groups'))
+
+    @staticmethod
+    def remove_from_group(user, group_id, username):
+        """Remove a user from a group.
+
+        If the operation fails, it raises an error with a human-readable reason.
+        """
+        group = UserGroup.objects.filter(pk=group_id).first()
+        if not group:
+            raise ValueError('Group does not exist.')
+        if group.owner != user:
+            raise ValueError('You are not the owner of the group.')
+
+        member = User.objects.filter(username=username).first()
+        if not member:
+            raise ValueError('No such user.')
+
+        group.user_set.remove(member)
+        group.save()
 
 
 class TagCreateView(LoginRequiredMixin, View):

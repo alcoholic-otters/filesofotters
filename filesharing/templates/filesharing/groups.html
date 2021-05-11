@@ -56,6 +56,26 @@
         <a href="{% url 'filesharing:group-delete' group.id %}">
           <button>Delete</button>
         </a>
+
+        <ul>
+          {% for member in group.user_set.all %}
+          <li>
+              {{ member.username }}
+              <a href="{% url 'filesharing:group-member-remove' group.id member.username %}">
+                <button>Remove</button>
+              </a>
+          </li>
+          {% endfor %}
+        </ul>
+
+        <form method="post" action="{% url 'filesharing:group-member-add' %}">
+          {% csrf_token %}
+          <label for="name">New member:</label>
+          <input type="text" name="username" required>
+          <input type="hidden" name="group_id" value="{{ group.id }}">
+          <input type="submit" value="Add">
+        </form>
+        <hr>
       </li>
     {% endfor %}
     </ul>
