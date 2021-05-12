@@ -1,20 +1,41 @@
-{% if messages %}
-<ul class="status-list">
-  {% for message in messages %}
-  <li class="{{ message.tags }}">{{ message }}</li>
-  {% endfor %}
-</ul>
-{% endif %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<h1>Log in</h1>
+  <title>Files of Otters - DEMO</title>
 
-<form method="post" action="{% url 'filesharing:login' %}">
-  {% csrf_token %}
-  <label for="username">Username</label>
-  <input type="text" name="username" required>
+  {% load static %}
+  <link rel="stylesheet" type="text/css" href="{% static 'filesharing/css/normalize.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'filesharing/css/base.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'filesharing/css/index.css' %}">
+</head>
 
-  <label for="password">Password</label>
-  <input type="password" name="password" required>
+<body>
+  <nav>
+    <header><h1>Files of Otters</h1></header>
+  </nav>
 
-  <input type="submit" value="Log in">
-</form>
+  {% if messages %}
+  <ul class="status-list">
+    {% for message in messages %}
+    <li class="{{ message.tags }}">{{ message }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+
+  <h1>Log in</h1>
+
+  <form method="post" action="{% url 'filesharing:login' %}">
+    {% csrf_token %}
+    <label for="username">Username</label>
+    <input type="text" name="username" required>
+
+    <label for="password">Password</label>
+    <input type="password" name="password" required>
+
+    <input type="submit" value="Log in">
+  </form>
+</body>
+</html>
