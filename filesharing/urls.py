@@ -16,7 +16,9 @@ urlpatterns = [
     path('group/member/add/', views.GroupMemberAddView.as_view(), name='group-member-add'),
     path('group/member/remove/<int:id>/<str:username>/',
         views.GroupMemberRemoveView.as_view(), name='group-member-remove'),
+    path('file/groups/set/<int:id>', views.FileGroupsSetView.as_view(), name='file-groups-set'),
     path('tag/create/', views.TagCreateView.as_view(), name='tag-create'),
     path('tag/delete/<int:id>/', views.TagDeleteView.as_view(), name='tag-delete'),
     path('search/', views.FileSearchView.as_view(), name='search'),
+    path('detail/file/<int:id>/', views.DetailFileView.as_view(), name='detail-file'),
 ]

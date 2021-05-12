@@ -13,7 +13,7 @@ from django.urls import reverse
 from django.views import View
 
 from .file_storage import FileStorage
-from .forms import FileUploadForm, GroupCreateForm, NewUserForm, TagCreateForm
+from .forms import FileGroupSetForm, FileUploadForm, GroupCreateForm, NewUserForm, TagCreateForm
 from .models import FileMetadata, Tag, UserGroup
 
 
@@ -287,6 +287,7 @@ class TagCreateView(LoginRequiredMixin, View):
         messages.success(request, 'New tag created.')
         return HttpResponseRedirect(reverse('filesharing:index'))
 
+
 class TagDeleteView(LoginRequiredMixin, View):
     """A view used to delete an existing tag."""
 
@@ -298,7 +299,7 @@ class TagDeleteView(LoginRequiredMixin, View):
         return HttpResponseRedirect(reverse('filesharing:index'))
 
 
-class FileSearchView(View):
+class FileSearchView(LoginRequiredMixin, View):
     """A view used for searching files."""
 
     def post(self, request, *_args, **_kwargs):
@@ -308,6 +309,62 @@ class FileSearchView(View):
         return HttpResponseRedirect(
             f'{reverse("filesharing:index")}?search={search}&tags={",".join(tag_ids)}'
         )
+
+
+class DetailFileView(LoginRequiredMixin, View):
+    """A view used to display details about a file."""
+
+    def get(self, request, *_args, **kwargs):
+        file = get_object_or_404(FileMetadata, pk=kwargs.get('id'))
+        visible_group = lambda group: group.owner == request.user
+
+        if file.owner != request.user:
+            messages.error(request, 'You are not the owner of the file.')
+            return HttpResponseRedirect(reverse('filesharing:index'))
+
+        context = {
+            'file': file,
+            'groups': list(filter(visible_group, UserGroup.objects.all())),
+        }
+        return render(request, 'filesharing/detail_file.html', context)
+
+
+class FileGroupsSetView(LoginRequiredMixin, View):
+    """A view used to expose a file to some group."""
+
+    def post(self, request, *_args, **kwargs):
+        file_id = kwargs.get('id')
+        form = FileGroupSetForm(request.POST)
+
+        if not form.is_valid():
+            messages.error(request, 'Form is invalid.')
+            return HttpResponseRedirect(
+                reverse('filesharing:detail-file', args=[file_id])
+            )
+
+        try:
+            groups = form.cleaned_data.get('groups')
+            FileGroupsSetView.set_groups(request.user, file_id, groups)
+            messages.success(request, 'Groups set.')
+        except ValueError as err:
+            messages.error(request, err)
+
+        return HttpResponseRedirect(
+            reverse('filesharing:detail-file', args=[file_id])
+        )
+
+    @staticmethod
+    def set_groups(user, file_id, groups):
+        """Sets the groups which can view  a file.
+
+        If the operation fails, it raises an error with a human-readable reason.
+        """
+        metadata = FileMetadata.objects.get(pk=file_id)
+        if metadata.owner != user:
+            raise ValueError('You are not the owner of the file.')
+
+        metadata.groups.set(groups)
+        metadata.save()
 
 
 @login_required

@@ -101,7 +101,7 @@
       <ul class="file-list">
         {% for file in files %}
         <li class="file-list-item">
-          <div class="file-name"><p>{{ file.name }}</p></div>
+          <div class="file-name"><a href="{% url 'filesharing:detail-file' file.id %}"><p>{{ file.name }}</p></a></div>
           <div class="file-size"><p>{{ file.human_size }}</p></div>
           <div class="download-button-container">
             <a class="download-button" href="{{ file.download_url }}" download>

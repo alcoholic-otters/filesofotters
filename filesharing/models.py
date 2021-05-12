@@ -65,6 +65,7 @@ class FileMetadata(models.Model):
     owner = models.ForeignKey(
         User, on_delete=models.CASCADE, null=True, blank=True
     )
+    groups = models.ManyToManyField(UserGroup)
     tags = models.ManyToManyField(Tag, 'file_set')
 
     def __str__(self):
@@ -106,4 +107,4 @@ class FileMetadata(models.Model):
 
     def visible(self, user):
         """Check if the file can be accessed by a user."""
-        return self.owner == user
+        return self.owner == user or any(g in self.groups.all() for g in user.groups.all())

@@ -4,7 +4,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
 
-from .models import Tag
+from .models import Tag, UserGroup
 
 
 class FileUploadForm(forms.Form):
@@ -12,6 +12,14 @@ class FileUploadForm(forms.Form):
 
     the_file = forms.FileField()
     tags = forms.ModelMultipleChoiceField(Tag.objects.all(), required=False)
+
+
+class FileGroupSetForm(forms.Form):
+    """The form used to set group visibility on a file."""
+
+    groups = forms.ModelMultipleChoiceField(
+        UserGroup.objects.all(), required=False
+    )
 
 
 # We do not use `UserCreationForm` directly, in case we'll want to customize it.
