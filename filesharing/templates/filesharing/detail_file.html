@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Files of Otters - DEMO</title>
+
+  {% load static %}
+  <link rel="stylesheet" type="text/css" href="{% static 'filesharing/css/normalize.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'filesharing/css/base.css' %}">
+</head>
+
+<body>
+  <nav>
+    <header><h1>Files of Otters</h1></header>
+  </nav>
+
+  <section>
+    <a href="{% url 'filesharing:index' %}"><button>Go back</button></a>
+  </section>
+
+  <section>
+    {% if messages %}
+    <ul class="status-list">
+      {% for message in messages %}
+      <li class="{{ message.tags }}">{{ message }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+  </section>
+
+  <section>
+    <h2>{{ file.name }}</h2>
+  </section>
+
+  <section>
+    <h2>Tags</h2>
+    {% if file.tags %}
+    <ul>
+      {% for tag in file.tags.all %}
+        <li>#{{ tag.name }}</li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p>No tags.</p>
+    {% endif %}
+  </section>
+
+  <section>
+    <h2>Groups allowed:</h2>
+
+    {% if file.groups.all %}
+    <ul>
+      {% for group in file.groups.all %}
+      <li>{{ group.display_name }}</li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p>No groups allowed.</p>
+    {% endif %}
+  </section>
+
+  <section>
+    <h2>Set other groups</h2>
+    <form method="post" action="{% url 'filesharing:file-groups-set' file.id %}">
+      {% csrf_token %}
+      <label for="groups">Choose groups:</label>
+      <select name="groups" multiple>
+        {% for group in groups %}
+        <option value="{{ group.id }}">{{ group.display_name }}</option>
+        {% endfor %}
+      </select>
+
+      <input type="submit" value="Set">
+    </form>
+  </section>
+</body>
+</html>

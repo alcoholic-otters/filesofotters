@@ -1,7 +1,6 @@
 :root {
     --bg1: #fafafa;
-    --bg2: #eeeeee;
-    --theme1: #f05e23;
+    --bg2: #eeeeee; --theme1: #f05e23;
     --theme2: #b80201;
     --dark1: #212121;
 }
@@ -37,4 +36,27 @@ footer {
 
 footer a {
     color: #bdbdbd;
+}
+
+.status-list {
+    list-style-type: none;
+    padding-inline-start: 0;
+}
+
+.status-list > li {
+    border-radius: 3px;
+    border-style: solid;
+    border-width: 2px;
+    padding: 1rem .5rem;
+    margin-bottom: .2rem;
+}
+
+.error {
+    background: #fad2cc;
+    border-color: #ff4838;
+}
+
+.success {
+    background: #c2edce;
+    border-color: #388087;
 }
