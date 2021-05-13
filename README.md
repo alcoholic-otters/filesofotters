@@ -3,15 +3,13 @@
 ## Copiați credențialele de pe Whatsapp
 
 Trebuie să copiați fișierul la calea `~/.aws/credentials`.
-Probabil trebuie să creați voi folderul `.aws`.
+Creați voi folderul `.aws` dacă nu există.
 
 ## Instalați Django și alte biblioteci
 
 ```bash
 pip install -r requirements.txt
 ```
-
-Cred că am pus toate bibliotecile în fișier.
 
 ## Pregătiți proiectul local
 
@@ -27,25 +25,25 @@ python3 manage.py runserver
 ```
 
 Intrați în browser la `localhost:8000/filesharing`. Trebuie să vă redirecționeze
-la o pagină de logare. Puteți crea un cont nou la
-`localhost:8000/filesharing/register`.
+la o pagină de logare.
+
+Puteți crea un cont nou la `localhost:8000/filesharing/register`.
 
 Puteți accesa și site-ul de administratori la `localhost:8000/admin`.
-Aici vedeți ce fișiere știe serverul vostru că s-au salvat.
 
 ## Cum lucrăm - branch-uri
 
 Eu zic să facem câte un branch pentru fiecare etapă și să lucrăm pe el. Îi
-dăm merge pe `main` abia la finalul etapei. Deci acum vom lucra pe `sprint2`.
+dăm merge pe `main` abia la finalul etapei. Deci acum vom lucra pe `sprint3`.
 
-Aduceți branch-ul pe local: `git checkout -b sprint2 origin/sprint2`.
+Aduceți branch-ul pe local: `git checkout -b sprint3 origin/sprint3`.
 
-Din `sprint2` vom face câte un branch pentru fiecare feature pe care îl scriem,
-de exemplu `add-groups`. Când terminăm de implementat feature-ul, dăm pull
-request ca să îl aducem în `sprint2`. Dând pull request îi lăsăm și pe ceilalți
+Din `sprint3` vom face câte un branch pentru fiecare feature pe care îl scriem,
+de exemplu `tag-buttons`. Când terminăm de implementat feature-ul, dăm pull
+request ca să îl aducem în `sprint3`. Dând pull request îi lăsăm și pe ceilalți
 coechipieri să dea review înainte să modificăm permanent.
 
 ## Linkuri
 
-[Tutorial Django (destul de lung)](
+[Tutorial Django (citește-l)](
 https://docs.djangoproject.com/en/3.2/intro/tutorial01/).
