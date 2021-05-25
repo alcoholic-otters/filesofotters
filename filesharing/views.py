@@ -334,7 +334,7 @@ class TagDetachView(LoginRequiredMixin, View):
         redirect_url = request.POST.get('next', reverse('filesharing:index'))
 
         if metadata.owner != request.user:
-            messages.error('You are not the owner of this file.')
+            messages.error(request, 'You are not the owner of this file.')
             return HttpResponseRedirect(redirect_url)
 
         metadata.tags.remove(tag)
