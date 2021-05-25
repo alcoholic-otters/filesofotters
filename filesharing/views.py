@@ -39,8 +39,7 @@ class FileUploadView(LoginRequiredMixin, View):
         try:
             user = request.user
             file_obj = request.FILES['the_file']
-            tags = form.cleaned_data.get('tags', [])
-            FileUploadView.save_and_store(user, file_obj, tags)
+            FileUploadView.save_and_store(user, file_obj)
         except ValueError as err:
             messages.error(request, str(err))
         else:
@@ -49,7 +48,7 @@ class FileUploadView(LoginRequiredMixin, View):
         return HttpResponseRedirect(reverse('filesharing:index'))
 
     @staticmethod
-    def save_and_store(user, file_obj, tags):
+    def save_and_store(user, file_obj):
         """Try to save a new file into the system.
 
         Checks if the given parameter is a valid, new file.
@@ -74,10 +73,7 @@ class FileUploadView(LoginRequiredMixin, View):
             raise ValueError('File already exists.')
 
         storage.save(metadata.storage_path, file_obj)
-
-        metadata.save()         # Save metadata to get an ID.
-        metadata.tags.set(tags)
-        metadata.save()         # Save with tags.
+        metadata.save()
 
 
 class FileDeleteView(LoginRequiredMixin, View):
