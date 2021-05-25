@@ -19,6 +19,8 @@ urlpatterns = [
     path('file/groups/set/<int:id>', views.FileGroupsSetView.as_view(), name='file-groups-set'),
     path('tag/create/', views.TagCreateView.as_view(), name='tag-create'),
     path('tag/delete/<int:id>/', views.TagDeleteView.as_view(), name='tag-delete'),
+    path('tag/detach/<int:file_id>/<int:tag_id>/',
+        views.TagDetachView.as_view(), name='tag-detach'),
     path('search/', views.FileSearchView.as_view(), name='search'),
     path('detail/file/<int:id>/', views.DetailFileView.as_view(), name='detail-file'),
 ]

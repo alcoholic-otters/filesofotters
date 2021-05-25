@@ -299,6 +299,22 @@ class TagDeleteView(LoginRequiredMixin, View):
         return HttpResponseRedirect(reverse('filesharing:index'))
 
 
+class TagDetachView(LoginRequiredMixin, View):
+    """A view used for detaching a tag from a file."""
+
+    def post(self, request, *_args, **kwargs):
+        metadata = FileMetadata.objects.get(id=kwargs.get('file_id'))
+        tag = Tag.objects.get(id=kwargs.get('tag_id'))
+        redirect_url = request.POST.get('next', reverse('filesharing:index'))
+
+        if metadata.owner != request.user:
+            messages.error('You are not the owner of this file.')
+            return HttpResponseRedirect(redirect_url)
+
+        metadata.tags.remove(tag)
+        return HttpResponseRedirect(redirect_url)
+
+
 class FileSearchView(LoginRequiredMixin, View):
     """A view used for searching files."""
 
@@ -389,6 +405,7 @@ def index(request):
     context = {
         'files': files,
         'user': request.user,
+        'request': request,
         'tags': Tag.objects.all(),
         'groups': UserGroup.objects.all(),
     }

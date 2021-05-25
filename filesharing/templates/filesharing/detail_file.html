@@ -39,7 +39,13 @@
     {% if file.tags %}
     <ul>
       {% for tag in file.tags.all %}
-        <li>#{{ tag.name }}</li>
+      <li>#{{ tag.name }}
+        <form method="post" action="{% url 'filesharing:tag-detach' file.id tag.id %}">
+          {% csrf_token %}
+          <input type="hidden" name="next" value="{{ request.get_full_path }}">
+          <input type="submit" value="Delete">
+        </form>
+      </li>
       {% endfor %}
     </ul>
     {% else %}
