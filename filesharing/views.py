@@ -94,6 +94,11 @@ class FileDeleteView(LoginRequiredMixin, View):
         metadata = get_object_or_404(FileMetadata, pk=metadata_id)
         storage = FileStorage()
 
+        # Only the file owner can delete a file.
+        if metadata.owner != request.user:
+            messages.error(request, 'You are not the owner of this file.')
+            return HttpResponseRedirect(reverse('filesharing:index'))
+
         storage.delete(metadata.storage_path) # Delete from external storage.
         metadata.delete()                     # Delete local metadata.
 
