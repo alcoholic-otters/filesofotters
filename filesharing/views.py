@@ -345,8 +345,23 @@ class FileSearchView(LoginRequiredMixin, View):
     """A view used for searching files."""
 
     def post(self, request, *_args, **_kwargs):
-        search = request.POST.get('search')
+        words = request.POST.get('search').split()
         tag_ids = request.POST.getlist('search_tags')
+
+        is_hashtag = lambda w: w.startswith('#')
+
+        # Don't mix search words with hashtags.
+        search = ' '.join(filter(lambda w: not is_hashtag(w), words))
+
+        # Add textual hashtags to the tags list.
+        for word in words:
+            if is_hashtag(word):
+                try:
+                    tag_name = word[1:]
+                    tag = Tag.objects.get(name=tag_name)
+                    tag_ids.append(str(tag.id))
+                except Tag.DoesNotExist:
+                    pass
 
         return HttpResponseRedirect(
             f'{reverse("filesharing:index")}?search={search}&tags={",".join(tag_ids)}'
