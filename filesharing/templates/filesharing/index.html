@@ -124,7 +124,8 @@
           </div>
           <ul>
             {% for tag in file.tags.all %}
-            <li>#{{ tag.name }}
+            <li>
+              <a href="{% url 'filesharing:index' %}?tags={{ tag.id }}">#{{ tag.name }}</a>
               <form method="post" action="{% url 'filesharing:tag-detach' file.id tag.id %}">
                 {% csrf_token %}
                 <input type="hidden" name="next" value="{{ request.path }}">
