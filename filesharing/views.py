@@ -299,6 +299,32 @@ class TagDeleteView(LoginRequiredMixin, View):
         return HttpResponseRedirect(reverse('filesharing:index'))
 
 
+class TagAttachView(LoginRequiredMixin, View):
+    """A view used to attach a new (or existing) tag to a file."""
+
+    def post(self, request, *_args, **kwargs):
+        metadata = FileMetadata.objects.get(id=kwargs.get('file_id'))
+        tag_name = request.POST.get('tag_name')
+        redirect_url = request.POST.get('next', reverse('filesharing:index'))
+
+        # Only the file owner can edit the file's properties.
+        if metadata.owner != request.user:
+            messages.error(request, 'You are not the owner of this file.')
+            return HttpResponseRedirect(redirect_url)
+
+        # Users can create new tags on the fly.
+        try:
+            tag = Tag.objects.get(name=tag_name)
+        except Tag.DoesNotExist:
+            tag = Tag(name=tag_name)
+            tag.save()
+
+        metadata.tags.add(tag)
+        metadata.save()
+
+        return HttpResponseRedirect(redirect_url)
+
+
 class TagDetachView(LoginRequiredMixin, View):
     """A view used for detaching a tag from a file."""
 
@@ -405,7 +431,6 @@ def index(request):
     context = {
         'files': files,
         'user': request.user,
-        'request': request,
         'tags': Tag.objects.all(),
         'groups': UserGroup.objects.all(),
     }

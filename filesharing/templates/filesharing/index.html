@@ -132,6 +132,13 @@
               </form>
             </li>
             {% endfor %}
+            <form method="post" action="{% url 'filesharing:tag-attach' file.id %}">
+              {% csrf_token %}
+              <label for="tag_name">New tag:</label>
+              <input type="text" name="tag_name" required>
+              <input type="hidden" name="next" value="{{ request.get_full_path }}">
+              <input type="submit" value="Add">
+            </form>
           </ul>
         </li>
         {% endfor %}
