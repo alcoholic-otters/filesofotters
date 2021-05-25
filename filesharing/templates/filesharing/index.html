@@ -63,7 +63,16 @@
       <ul class="file-list">
         {% for file in files %}
         <li class="file-list-item">
-          <div class="file-name"><a href="{% url 'filesharing:detail-file' file.id %}"><p>{{ file.name }}</p></a></div>
+          <div class="file-name">
+            <p>
+              <a href="{% url 'filesharing:detail-file' file.id %}"><p>{{ file.name }}</a>
+              {% if file.owner == request.user %}
+              (mine)
+              {% else %}
+              ({{ file.owner.username }})
+              {% endif %}
+            </p>
+          </div>
           <div class="file-size"><p>{{ file.human_size }}</p></div>
           <div class="download-button-container">
             <a class="download-button" href="{{ file.download_url }}" download>
@@ -88,13 +97,16 @@
             {% for tag in file.tags.all %}
             <li>
               <a href="{% url 'filesharing:index' %}?tags={{ tag.id }}">#{{ tag.name }}</a>
+              {% if file.owner == request.user %}
               <form method="post" action="{% url 'filesharing:tag-detach' file.id tag.id %}">
                 {% csrf_token %}
                 <input type="hidden" name="next" value="{{ request.path }}">
                 <input type="submit" value="Delete">
               </form>
+              {% endif %}
             </li>
             {% endfor %}
+            {% if file.owner == request.user %}
             <form method="post" action="{% url 'filesharing:tag-attach' file.id %}">
               {% csrf_token %}
               <label for="tag_name">New tag:</label>
@@ -102,6 +114,7 @@
               <input type="hidden" name="next" value="{{ request.get_full_path }}">
               <input type="submit" value="Add">
             </form>
+            {% endif %}
           </ul>
         </li>
         {% endfor %}
