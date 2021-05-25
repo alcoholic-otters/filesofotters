@@ -40,41 +40,11 @@
     </section>
 
     <section>
-      <h2># Manage tags</h2>
-      <form method="post" action="{% url 'filesharing:tag-create' %}">
-        {% csrf_token %}
-        <label for="name">Tag name:</label>
-        <input type="text" name="name" required>
-        <input type="submit" value="Add">
-      </form>
-
-      <h3># Available tags</h3>
-      <ul>
-        {% for tag in tags %}
-        <li>
-          {{ tag }}
-          <a href="{% url 'filesharing:tag-delete' tag.id %}">
-            <button>Delete</button>
-          </a>
-        </li>
-        {% endfor %}
-      </ul>
-    </section>
-
-    <section>
       <h2># Upload a file</h2>
       <form id="upload-form" method="post" action="{% url 'filesharing:upload' %}" enctype="multipart/form-data">
         {% csrf_token %}
         <label for="the_file">Choose a file:</label>
         <input type="file" name="the_file" required>
-
-        <label for="tags">Choose tags:</label>
-        <select name="tags" multiple>
-          {% for tag in tags %}
-          <option value="{{ tag.id }}">{{ tag.name }}</option>
-          {% endfor %}
-        </select>
-
         <input id="upload-button" type="submit" value="Upload">
       </form>
     </section>
@@ -86,14 +56,6 @@
         {% csrf_token %}
         <label for="search">Search by name:</label>
         <input type="text" name="search">
-
-        <label for="search_tags">Choose tags:</label>
-        <select name="search_tags" multiple>
-          {% for tag in tags %}
-          <option value="{{ tag.id }}">{{ tag.name }}</option>
-          {% endfor %}
-        </select>
-
         <input type="submit" value="Search">
       </form>
 
@@ -124,8 +86,22 @@
           </div>
           <ul>
             {% for tag in file.tags.all %}
-            <li>#{{ tag.name }}</li>
+            <li>
+              <a href="{% url 'filesharing:index' %}?tags={{ tag.id }}">#{{ tag.name }}</a>
+              <form method="post" action="{% url 'filesharing:tag-detach' file.id tag.id %}">
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{{ request.path }}">
+                <input type="submit" value="Delete">
+              </form>
+            </li>
             {% endfor %}
+            <form method="post" action="{% url 'filesharing:tag-attach' file.id %}">
+              {% csrf_token %}
+              <label for="tag_name">New tag:</label>
+              <input type="text" name="tag_name" required>
+              <input type="hidden" name="next" value="{{ request.get_full_path }}">
+              <input type="submit" value="Add">
+            </form>
           </ul>
         </li>
         {% endfor %}

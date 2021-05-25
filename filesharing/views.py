@@ -39,8 +39,7 @@ class FileUploadView(LoginRequiredMixin, View):
         try:
             user = request.user
             file_obj = request.FILES['the_file']
-            tags = form.cleaned_data.get('tags', [])
-            FileUploadView.save_and_store(user, file_obj, tags)
+            FileUploadView.save_and_store(user, file_obj)
         except ValueError as err:
             messages.error(request, str(err))
         else:
@@ -49,7 +48,7 @@ class FileUploadView(LoginRequiredMixin, View):
         return HttpResponseRedirect(reverse('filesharing:index'))
 
     @staticmethod
-    def save_and_store(user, file_obj, tags):
+    def save_and_store(user, file_obj):
         """Try to save a new file into the system.
 
         Checks if the given parameter is a valid, new file.
@@ -74,10 +73,7 @@ class FileUploadView(LoginRequiredMixin, View):
             raise ValueError('File already exists.')
 
         storage.save(metadata.storage_path, file_obj)
-
-        metadata.save()         # Save metadata to get an ID.
-        metadata.tags.set(tags)
-        metadata.save()         # Save with tags.
+        metadata.save()
 
 
 class FileDeleteView(LoginRequiredMixin, View):
@@ -299,12 +295,69 @@ class TagDeleteView(LoginRequiredMixin, View):
         return HttpResponseRedirect(reverse('filesharing:index'))
 
 
+class TagAttachView(LoginRequiredMixin, View):
+    """A view used to attach a new (or existing) tag to a file."""
+
+    def post(self, request, *_args, **kwargs):
+        metadata = FileMetadata.objects.get(id=kwargs.get('file_id'))
+        tag_name = request.POST.get('tag_name')
+        redirect_url = request.POST.get('next', reverse('filesharing:index'))
+
+        # Only the file owner can edit the file's properties.
+        if metadata.owner != request.user:
+            messages.error(request, 'You are not the owner of this file.')
+            return HttpResponseRedirect(redirect_url)
+
+        # Users can create new tags on the fly.
+        try:
+            tag = Tag.objects.get(name=tag_name)
+        except Tag.DoesNotExist:
+            tag = Tag(name=tag_name)
+            tag.save()
+
+        metadata.tags.add(tag)
+        metadata.save()
+
+        return HttpResponseRedirect(redirect_url)
+
+
+class TagDetachView(LoginRequiredMixin, View):
+    """A view used for detaching a tag from a file."""
+
+    def post(self, request, *_args, **kwargs):
+        metadata = FileMetadata.objects.get(id=kwargs.get('file_id'))
+        tag = Tag.objects.get(id=kwargs.get('tag_id'))
+        redirect_url = request.POST.get('next', reverse('filesharing:index'))
+
+        if metadata.owner != request.user:
+            messages.error(request, 'You are not the owner of this file.')
+            return HttpResponseRedirect(redirect_url)
+
+        metadata.tags.remove(tag)
+        return HttpResponseRedirect(redirect_url)
+
+
 class FileSearchView(LoginRequiredMixin, View):
     """A view used for searching files."""
 
     def post(self, request, *_args, **_kwargs):
-        search = request.POST.get('search')
+        words = request.POST.get('search').split()
         tag_ids = request.POST.getlist('search_tags')
+
+        is_hashtag = lambda w: w.startswith('#')
+
+        # Don't mix search words with hashtags.
+        search = ' '.join(filter(lambda w: not is_hashtag(w), words))
+
+        # Add textual hashtags to the tags list.
+        for word in words:
+            if is_hashtag(word):
+                try:
+                    tag_name = word[1:]
+                    tag = Tag.objects.get(name=tag_name)
+                    tag_ids.append(str(tag.id))
+                except Tag.DoesNotExist:
+                    pass
 
         return HttpResponseRedirect(
             f'{reverse("filesharing:index")}?search={search}&tags={",".join(tag_ids)}'
