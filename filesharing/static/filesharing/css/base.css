@@ -1,7 +1,10 @@
 :root {
     --bg1: #fafafa;
-    --bg2: #eeeeee; --theme1: #f05e23;
+    --bg2: #eeeeee;
+    --bg3: #050301;
+    --theme1: #f05e23;
     --theme2: #b80201;
+    --theme2-transparent: rgba(184, 2, 1, 0.5);
     --dark1: #212121;
 }
 
@@ -19,6 +22,66 @@ body {
 
 nav {
     background-color: var(--theme1);
+    padding: .2rem .2rem 0;
+}
+
+nav > header {
+    padding: 1rem 2vw;
+}
+
+#nav-list {
+    align-items: center;
+    background: var(--bg3);
+    display: flex;
+    flex-direction: row;
+    font-size: 1.3em;
+    list-style-type: none;
+    margin: -.2rem;
+    padding: .2rem 3rem;
+}
+
+#nav-list > li {
+    color: var(--bg1);
+    padding: .5rem 1rem;
+}
+
+#nav-list > li a {
+    color: var(--bg1);
+    outline: none;
+    text-decoration: none;
+}
+
+#nav-list > li a:hover {
+    color: var(--bg1);
+    font-size: 1.35rem;
+    font-weight: bold;
+}
+
+#nav-list > li p {
+    margin: 0;
+}
+
+#nav-list .current a {
+    color: var(--theme2);
+    font-weight: bold;
+}
+
+#log-in-info {
+    font-size: 1.1rem;
+}
+
+#log-out-button {
+    background: none;
+    border: 2px solid var(--theme2);
+    border-radius: 5px;
+    color: var(--theme1);
+    font-weight: bold;
+    margin-left: auto;
+    padding: .3rem;
+}
+
+#log-out-button:hover {
+    background: var(--theme2-transparent);
 }
 
 main {
@@ -28,7 +91,7 @@ main {
 }
 
 footer {
-    background-color: black;
+    background: var(--bg3);
     color: #fafafa;
     font-size: 1.1em;
     padding: 1rem 2vw;
@@ -59,4 +122,11 @@ footer a {
 .success {
     background: #c2edce;
     border-color: #388087;
+}
+
+@media only screen and (max-width: 500px) {
+    #nav-list {
+        align-items: center;
+        flex-direction: column;
+    }
 }

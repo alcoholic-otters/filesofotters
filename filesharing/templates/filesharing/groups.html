@@ -14,27 +14,29 @@
 <body>
   <nav>
     <header><h1>Files of Otters</h1></header>
-  </nav>
-  <section>
-    You are logged in as '<strong>{{ user.username }}</strong>'.
-    <form method="post" action="{% url 'filesharing:logout' %}">
-      {% csrf_token %}
-      <input type="submit" value="Log out">
-    </form>
-    <hr>
-    <a href="{% url 'filesharing:index' %}"><button>Go back</button></a>
-    <hr>
-  </section>
 
+    <ul id="nav-list">
+      <li><a href="{% url 'filesharing:index' %}">Home</a></li>
+      <li class="current"><a href="{% url 'filesharing:manage-groups' %}">Groups</a></li>
+      <li id="log-in-info">Logged in as <strong>{{ user.username }}</strong>.</li>
+      <li>
+        <form method="post" action="{% url 'filesharing:logout' %}">
+          {% csrf_token %}
+          <input id="log-out-button" type="submit" value="Log out">
+        </form>
+      </li>
+    </ul>
+  </nav>
+
+  {% if messages %}
   <section>
-    {% if messages %}
     <ul class="status-list">
       {% for message in messages %}
       <li class="{{ message.tags }}">{{ message }}</li>
       {% endfor %}
     </ul>
-    {% endif %}
   </section>
+  {% endif %}
 
   <section>
     <h2>Create a group</h2>
