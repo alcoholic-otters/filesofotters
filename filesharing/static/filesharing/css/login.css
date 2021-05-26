@@ -1,0 +1,19 @@
+#log-in-form {
+    align-items: flex-start;
+    display: inline-flex;
+    flex-direction: column;
+}
+
+#log-in-form input, label {
+    font-size: 1.1em;
+    margin-top: .5rem;
+}
+
+#log-in-form .submit-button {
+    margin-top: 1rem;
+}
+
+#register-message {
+    font-size: 1.1em;
+    margin-top: 2rem;
+}
