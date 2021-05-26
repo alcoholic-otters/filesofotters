@@ -1,27 +1,22 @@
-#log-in-form {
+#register-form {
     align-items: flex-start;
     display: inline-flex;
     flex-direction: column;
 }
 
-#log-in-form input, label {
+#register-form input, label {
     font-size: 1.1em;
     margin-top: .5rem;
 }
 
-#log-in-form input[type=text],
-#log-in-form input[type=password] {
+#register-form input[type=text],
+#register-form input[type=password] {
     border-radius: 5px;
     font-size: 1.1em;
     height: 1rem;
     padding: .3rem;
 }
 
-#log-in-form .submit-button {
+#register-form .submit-button {
     margin-top: 1rem;
-}
-
-#register-message {
-    font-size: 1.1em;
-    margin-top: 2rem;
 }
