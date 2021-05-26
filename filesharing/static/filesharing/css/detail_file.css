@@ -1,0 +1,117 @@
+section {
+    margin-top: 2rem;
+}
+
+#the-file-name {
+    font-size: 2em;
+}
+
+.file-tags-list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    grid-column: 1 / 5;
+    list-style-type: none;
+    padding: 0;
+}
+
+.file-tags-list > li {
+    align-items: center;
+    background: var(--theme2);
+    border: 2.5px solid var(--theme1);
+    border-radius: 10px;
+    color: var(--bg1);
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    font-size: 1em;
+    margin: .1rem .2rem;
+    padding: .1rem .3rem;
+}
+
+.file-tags-list > li a {
+    color: var(--bg1);
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.detach-button {
+    background: none;
+    border: 0;
+    color: var(--bg1);
+    font-size: 1.5em;
+    font-weight: bold;
+    text-align: center;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.detach-button:hover {
+    color: var(--theme1);
+}
+
+.attach-form {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    grid-column: 1 / 5;
+    padding: auto .2rem;
+    margin: .5rem .5rem;
+    width: 100%;
+}
+
+.attach-form label {
+    font-size: 1.1em;
+    margin: .1rem;
+}
+
+.attach-form input {
+    margin: .1rem;
+}
+
+.new-tag-name {
+    border-radius: 5px;
+    font-size: 1.1em;
+    height: 1rem;
+    padding: .3rem;
+}
+
+#allowed-groups-list {
+    list-style-type: "\02705";
+    padding: 0 2rem;
+}
+
+#allowed-groups-list > li {
+    font-size: 1.1em;
+    margin: .5rem 0 0;
+    padding: 0 1rem;
+}
+
+#groups-form {
+    align-items: flex-start;
+    display: inline-flex;
+    flex-direction: column;
+}
+
+#groups-form label {
+    font-size: 1.1em;
+    margin: 0 0 .5rem;
+}
+
+#groups-form select[multiple] {
+    border: 2px solid var(--theme2);
+    border-radius: 5px;
+    font-size: 1.2em;
+    margin: .5rem 0 .5rem;
+    min-width: 20rem;
+}
+
+#groups-form select[multiple]:focus option:checked {
+    background: var(--theme2) linear-gradient(0deg, var(--theme2) 0%, var(--theme2) 100%);
+}
+
+#groups-form .submit-button {
+    margin-top: .5rem;
+    min-width: 5rem;
+}

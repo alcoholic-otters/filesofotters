@@ -124,6 +124,18 @@ footer a {
     border-color: #388087;
 }
 
+.submit-button {
+    background: var(--bg2);
+    border: 2px solid var(--theme2);
+    border-radius: 5px;
+    font-size: 1.1em;
+    padding: .3rem;
+}
+
+.submit-button:hover {
+    background: var(--theme1);
+}
+
 @media only screen and (max-width: 500px) {
     #nav-list {
         align-items: center;
