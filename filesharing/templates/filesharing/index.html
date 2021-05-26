@@ -100,13 +100,11 @@
             {% for tag in file.tags.all %}
             <li>
               <a href="{% url 'filesharing:index' %}?tags={{ tag.id }}">#{{ tag.name }}</a>
-              {% if file.owner == request.user %}
               <form method="post" action="{% url 'filesharing:tag-detach' file.id tag.id %}">
                 {% csrf_token %}
                 <input type="hidden" name="next" value="{{ request.path }}">
                 <input class="detach-button" type="submit" value="x">
               </form>
-              {% endif %}
             </li>
             {% endfor %}
             {% if file.owner == request.user %}
