@@ -12,6 +12,11 @@ upload files and share them with otter [*sic*] users to trust.
 - File search
 - File organization with tags
 
+## Documentation
+
+If you want to learn how to do something with the app, you can find some docs
+[here](docs).
+
 ## Development
 
 This app is being developed using git, and the central repo is on Github, at
