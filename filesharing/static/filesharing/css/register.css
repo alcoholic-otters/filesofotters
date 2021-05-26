@@ -1,0 +1,22 @@
+#register-form {
+    align-items: flex-start;
+    display: inline-flex;
+    flex-direction: column;
+}
+
+#register-form input, label {
+    font-size: 1.1em;
+    margin-top: .5rem;
+}
+
+#register-form input[type=text],
+#register-form input[type=password] {
+    border-radius: 5px;
+    font-size: 1.1em;
+    height: 1rem;
+    padding: .3rem;
+}
+
+#register-form .submit-button {
+    margin-top: 1rem;
+}
