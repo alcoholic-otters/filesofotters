@@ -46,7 +46,7 @@
         {% csrf_token %}
         <label for="the_file">Choose a file:</label>
         <input type="file" name="the_file" required>
-        <input id="upload-button" type="submit" value="Upload">
+        <input id="upload-button" class="submit-button" type="submit" value="Upload">
       </form>
     </section>
 
@@ -57,7 +57,7 @@
         {% csrf_token %}
         <label for="search">Search by name:</label>
         <input type="text" name="search">
-        <input type="submit" value="Search">
+        <input class="submit-button" type="submit" value="Search">
       </form>
 
       {% if files %}
@@ -66,12 +66,14 @@
         <li class="file-list-item">
           <div class="file-name">
             <p>
-              <a href="{% url 'filesharing:detail-file' file.id %}"><p>{{ file.name }}</a>
-              {% if file.owner == request.user %}
-              (mine)
-              {% else %}
-              ({{ file.owner.username }})
-              {% endif %}
+              <a class="detail-link" href="{% url 'filesharing:detail-file' file.id %}">{{ file.name }}</a>
+              <span class="owner-name">
+                {% if file.owner == request.user %}
+                (mine)
+                {% else %}
+                ({{ file.owner.username }})
+                {% endif %}
+              </span>
             </p>
           </div>
           <div class="file-size"><p>{{ file.human_size }}</p></div>
@@ -94,7 +96,7 @@
               </div>
             </form>
           </div>
-          <ul>
+          <ul class="file-tags-list">
             {% for tag in file.tags.all %}
             <li>
               <a href="{% url 'filesharing:index' %}?tags={{ tag.id }}">#{{ tag.name }}</a>
@@ -102,18 +104,18 @@
               <form method="post" action="{% url 'filesharing:tag-detach' file.id tag.id %}">
                 {% csrf_token %}
                 <input type="hidden" name="next" value="{{ request.path }}">
-                <input type="submit" value="Delete">
+                <input class="detach-button" type="submit" value="x">
               </form>
               {% endif %}
             </li>
             {% endfor %}
             {% if file.owner == request.user %}
-            <form method="post" action="{% url 'filesharing:tag-attach' file.id %}">
+            <form class="attach-form" method="post" action="{% url 'filesharing:tag-attach' file.id %}">
               {% csrf_token %}
               <label for="tag_name">New tag:</label>
-              <input type="text" name="tag_name" required>
+              <input class="new-tag-name" type="text" name="tag_name" required>
               <input type="hidden" name="next" value="{{ request.get_full_path }}">
-              <input type="submit" value="Add">
+              <input class="submit-button" type="submit" value="Add">
             </form>
             {% endif %}
           </ul>

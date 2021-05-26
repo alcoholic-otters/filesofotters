@@ -4,14 +4,7 @@ section {
 
 /* All this code is buggy and should be rewritten. */
 
-#upload-form {
-}
-
-#upload-form label {
-    font-size: 1.1em;
-}
-
-#upload-button {
+.submit-button {
     background: var(--bg2);
     border: 2px solid var(--theme2);
     border-radius: 5px;
@@ -19,8 +12,15 @@ section {
     padding: .3rem;
 }
 
-#upload-button:hover {
+.submit-button:hover {
     background: var(--theme1);
+}
+
+#upload-form {
+}
+
+#upload-form label {
+    font-size: 1.1em;
 }
 
 #file-list-empty-message {
@@ -38,6 +38,7 @@ section {
     grid-template-columns: 75% 12.5% 6.25% 6.25%;
     align-items: center;
     padding: .1rem .5rem;
+    margin-top: .5rem;
 }
 
 .file-list-item:hover {
@@ -50,9 +51,90 @@ section {
     padding: 0 1rem;
 }
 
+.detail-link {
+    color: black;
+    font-size: 1.1em;
+    line-height: 1.5em;
+}
+
+.owner-name {
+    color: var(--dark1);
+}
+
 .file-size {
     padding: 0 1rem;
     text-align: right;
+}
+
+.file-tags-list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    grid-column: 1 / 5;
+    list-style-type: none;
+    padding: 0;
+}
+
+.file-tags-list > li {
+    align-items: center;
+    background: var(--theme2);
+    border: 2.5px solid var(--theme1);
+    border-radius: 10px;
+    color: var(--bg1);
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    font-size: 1em;
+    margin: auto .2rem;
+    padding: .1rem .3rem;
+}
+
+.file-tags-list > li a {
+    color: var(--bg1);
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.detach-button {
+    background: none;
+    border: 0;
+    color: var(--bg1);
+    font-size: 1.5em;
+    font-weight: bold;
+    text-align: center;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.detach-button:hover {
+    color: var(--theme1);
+}
+
+.attach-form {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    grid-column: 1 / 5;
+    padding: auto .2rem;
+    margin: .5rem .5rem;
+    width: 100%;
+}
+
+.attach-form label {
+    font-size: 1.1em;
+    margin: .1rem;
+}
+
+.attach-form input {
+    margin: .1rem;
+}
+
+.new-tag-name {
+    border-radius: 5px;
+    font-size: 1.1em;
+    height: 1rem;
+    padding: .3rem;
 }
 
 .download-button-container {
