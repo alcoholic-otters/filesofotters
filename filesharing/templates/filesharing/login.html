@@ -9,33 +9,56 @@
   {% load static %}
   <link rel="stylesheet" type="text/css" href="{% static 'filesharing/css/normalize.css' %}">
   <link rel="stylesheet" type="text/css" href="{% static 'filesharing/css/base.css' %}">
-  <link rel="stylesheet" type="text/css" href="{% static 'filesharing/css/index.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'filesharing/css/login.css' %}">
 </head>
 
 <body>
   <nav>
     <header><h1>Files of Otters</h1></header>
+
+    <ul id="nav-list">
+      <li class="current"><a href="{% url 'filesharing:login' %}">Home</a></li>
+      <li><a href="{% url 'filesharing:register' %}">Register</a></li>
+    </ul>
   </nav>
 
-  {% if messages %}
-  <ul class="status-list">
-    {% for message in messages %}
-    <li class="{{ message.tags }}">{{ message }}</li>
-    {% endfor %}
-  </ul>
-  {% endif %}
+  <main>
+    {% if messages %}
+    <ul class="status-list">
+      {% for message in messages %}
+      <li class="{{ message.tags }}">{{ message }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
 
-  <h1>Log in</h1>
+    <h1>Log in</h1>
 
-  <form method="post" action="{% url 'filesharing:login' %}">
-    {% csrf_token %}
-    <label for="username">Username</label>
-    <input type="text" name="username" required>
+    <form id="log-in-form" method="post" action="{% url 'filesharing:login' %}">
+      {% csrf_token %}
+      <label for="username">Username</label>
+      <input type="text" name="username" required>
 
-    <label for="password">Password</label>
-    <input type="password" name="password" required>
+      <label for="password">Password</label>
+      <input type="password" name="password" required>
 
-    <input type="submit" value="Log in">
-  </form>
+      <input class="submit-button" type="submit" value="Log in">
+    </form>
+
+    <p id="register-message">
+      Don't have an account?
+      <a href="{% url 'filesharing:register' %}">Register one</a>.
+    </p>
+  </main>
+
+  <footer>
+    <div>
+      Icons made by <a href="https://creativemarket.com/Becris" title="Becris">Becris</a>
+      from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
+    </div>
+    <div>
+      Icons made by <a href="https://www.flaticon.com/authors/bqlqn" title="bqlqn">bqlqn</a>
+      from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
+    </div>
+  </footer>
 </body>
 </html>

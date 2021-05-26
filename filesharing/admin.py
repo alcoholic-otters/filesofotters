@@ -4,7 +4,11 @@ from .models import Tag, FileMetadata
 
 
 class TagAdmin(admin.ModelAdmin):
-    list_display = ('name',)
+    list_display = ('name', 'file_count')
+
+    def file_count(self, obj):
+        return str(FileMetadata.objects.filter(tags__in=[obj.id]).count())
+    file_count.short_description = 'Files'
 
 
 class FileMetadataAdmin(admin.ModelAdmin):

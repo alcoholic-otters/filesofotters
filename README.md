@@ -1,49 +1,27 @@
-# Files of Otters - Ghid rapid
+# Files of Otters
 
-## Copiați credențialele de pe Whatsapp
+**Files of Otters** is a file-sharing system, a web app which allows you to
+upload files and share them with otter [*sic*] users to trust.
 
-Trebuie să copiați fișierul la calea `~/.aws/credentials`.
-Creați voi folderul `.aws` dacă nu există.
+![The main screen of the app in use](docs/img/main-screen.png)
 
-## Instalați Django și alte biblioteci
+## Main features
 
-```bash
-pip install -r requirements.txt
-```
+- File upload and download
+- Privacy control
+- File search
+- File organization with tags
 
-## Pregătiți proiectul local
+## Documentation
 
-```bash
-# Configurați baza de date locală - trebuie să arate niște ok-uri.
-python3 manage.py migrate
+If you want to learn how to do something with the app, you can find some docs
+[here](docs).
 
-# Creați un cont administrator - e doar local la voi, dați ce date vreți.
-python3 manage.py createsuperuser
+## Development
 
-# Porniți serverul.
-python3 manage.py runserver
-```
+This app is being developed using git, and the central repo is on Github, at
+[this address](https://github.com/alcoholic-otters/filesofotters).
 
-Intrați în browser la `localhost:8000/filesharing`. Trebuie să vă redirecționeze
-la o pagină de logare.
+## License
 
-Puteți crea un cont nou la `localhost:8000/filesharing/register`.
-
-Puteți accesa și site-ul de administratori la `localhost:8000/admin`.
-
-## Cum lucrăm - branch-uri
-
-Eu zic să facem câte un branch pentru fiecare etapă și să lucrăm pe el. Îi
-dăm merge pe `main` abia la finalul etapei. Deci acum vom lucra pe `sprint3`.
-
-Aduceți branch-ul pe local: `git checkout -b sprint3 origin/sprint3`.
-
-Din `sprint3` vom face câte un branch pentru fiecare feature pe care îl scriem,
-de exemplu `tag-buttons`. Când terminăm de implementat feature-ul, dăm pull
-request ca să îl aducem în `sprint3`. Dând pull request îi lăsăm și pe ceilalți
-coechipieri să dea review înainte să modificăm permanent.
-
-## Linkuri
-
-[Tutorial Django (citește-l)](
-https://docs.djangoproject.com/en/3.2/intro/tutorial01/).
+This project is licensed under the terms of the MIT license.

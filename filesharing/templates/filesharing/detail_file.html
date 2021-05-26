@@ -9,71 +9,108 @@
   {% load static %}
   <link rel="stylesheet" type="text/css" href="{% static 'filesharing/css/normalize.css' %}">
   <link rel="stylesheet" type="text/css" href="{% static 'filesharing/css/base.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'filesharing/css/detail_file.css' %}">
 </head>
 
 <body>
   <nav>
     <header><h1>Files of Otters</h1></header>
+
+    <ul id="nav-list">
+      <li><a href="{% url 'filesharing:index' %}">Home</a></li>
+      <li><a href="{% url 'filesharing:manage-groups' %}">Groups</a></li>
+      <li id="log-in-info">Logged in as <strong>{{ user.username }}</strong>.</li>
+      <li>
+        <form method="post" action="{% url 'filesharing:logout' %}">
+          {% csrf_token %}
+          <input id="log-out-button" type="submit" value="Log out">
+        </form>
+      </li>
+    </ul>
   </nav>
 
-  <section>
-    <a href="{% url 'filesharing:index' %}"><button>Go back</button></a>
-  </section>
-
-  <section>
+  <main>
     {% if messages %}
-    <ul class="status-list">
-      {% for message in messages %}
-      <li class="{{ message.tags }}">{{ message }}</li>
-      {% endfor %}
-    </ul>
-    {% endif %}
-  </section>
-
-  <section>
-    <h2>{{ file.name }}</h2>
-  </section>
-
-  <section>
-    <h2>Tags</h2>
-    {% if file.tags %}
-    <ul>
-      {% for tag in file.tags.all %}
-        <li>#{{ tag.name }}</li>
-      {% endfor %}
-    </ul>
-    {% else %}
-    <p>No tags.</p>
-    {% endif %}
-  </section>
-
-  <section>
-    <h2>Groups allowed:</h2>
-
-    {% if file.groups.all %}
-    <ul>
-      {% for group in file.groups.all %}
-      <li>{{ group.display_name }}</li>
-      {% endfor %}
-    </ul>
-    {% else %}
-    <p>No groups allowed.</p>
-    {% endif %}
-  </section>
-
-  <section>
-    <h2>Set other groups</h2>
-    <form method="post" action="{% url 'filesharing:file-groups-set' file.id %}">
-      {% csrf_token %}
-      <label for="groups">Choose groups:</label>
-      <select name="groups" multiple>
-        {% for group in groups %}
-        <option value="{{ group.id }}">{{ group.display_name }}</option>
+    <section>
+      <ul class="status-list">
+        {% for message in messages %}
+        <li class="{{ message.tags }}">{{ message }}</li>
         {% endfor %}
-      </select>
+      </ul>
+    </section>
+    {% endif %}
 
-      <input type="submit" value="Set">
-    </form>
-  </section>
+    <section>
+      <h2 id="the-file-name">"{{ file.name }}"</h2>
+    </section>
+
+    <section>
+      <h2># Tags</h2>
+      {% if file.tags %}
+      <ul class="file-tags-list">
+        {% for tag in file.tags.all %}
+        <li>
+          <a href="{% url 'filesharing:index' %}?tags={{ tag.id }}">#{{ tag.name }}</a>
+          <form method="post" action="{% url 'filesharing:tag-detach' file.id tag.id %}">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ request.get_full_path }}">
+            <input class="detach-button" type="submit" value="x">
+          </form>
+        </li>
+        {% endfor %}
+        <form class="attach-form" method="post" action="{% url 'filesharing:tag-attach' file.id %}">
+          {% csrf_token %}
+          <label for="tag_name">New tag:</label>
+          <input class="new-tag-name" type="text" name="tag_name" required>
+          <input type="hidden" name="next" value="{{ request.get_full_path }}">
+          <input class="submit-button" type="submit" value="Add">
+        </form>
+      </ul>
+      {% else %}
+      <p>No tags.</p>
+      {% endif %}
+    </section>
+
+    <section>
+      <h2># Group access</h2>
+
+      {% if file.groups.all %}
+      <ul id="allowed-groups-list">
+        {% for group in file.groups.all %}
+        <li>{{ group.display_name }}</li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p>No groups allowed.</p>
+      {% endif %}
+    </section>
+
+    <section>
+      <h2># Reset groups</h2>
+
+      <form id="groups-form" method="post" action="{% url 'filesharing:file-groups-set' file.id %}">
+        {% csrf_token %}
+        <label for="groups">Choose new groups:</label>
+        <select name="groups" multiple>
+          {% for group in groups %}
+          <option value="{{ group.id }}">{{ group.display_name }}</option>
+          {% endfor %}
+        </select>
+
+        <input class="submit-button" type="submit" value="Set">
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <div>
+      Icons made by <a href="https://creativemarket.com/Becris" title="Becris">Becris</a>
+      from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
+    </div>
+    <div>
+      Icons made by <a href="https://www.flaticon.com/authors/bqlqn" title="bqlqn">bqlqn</a>
+      from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
+    </div>
+  </footer>
 </body>
 </html>
