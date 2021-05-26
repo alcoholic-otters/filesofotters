@@ -1,0 +1,101 @@
+section {
+    margin-top: 2.5rem;
+}
+
+section:first-child {
+    margin-top: 1rem;
+}
+
+#new-group-form {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+#new-group-form label {
+    font-size: 1.1em;
+    margin-right: .5rem;
+}
+
+#new-group-name {
+    border-radius: 5px;
+    font-size: 1.1em;
+    height: 1rem;
+    margin-right: .5rem;
+    padding: .3rem;
+}
+
+#groups-list {
+    font-size: 1.2em;
+    list-style-position: inside;
+    list-style-type: "👥";
+    padding: 0;
+}
+
+.groups-item {
+    margin-top: 2rem;
+}
+
+.groups-item:first-child {
+    margin-top: 0;
+}
+
+.member-list {
+    list-style-type: square;
+    margin: .5rem 0;
+    padding-left: 1rem;
+}
+
+.member-list-item {
+    padding: .15rem 0;
+}
+
+.remove-member-button {
+    background: none;
+    border: 2px solid var(--theme2);
+    border-radius: 5px;
+    color: var(--theme2);
+    font-weight: bold;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.remove-member-button:hover {
+    background: var(--theme1-transparent);
+}
+
+.new-member-name {
+    border-radius: 5px;
+    font-size: 1.1em;
+    height: 1rem;
+    padding: .3rem;
+}
+
+.group-name {
+    font-weight: bold;
+}
+
+.delete-group-button {
+    background: none;
+    border: 2px solid var(--theme2);
+    border-radius: 5px;
+    color: var(--theme2);
+    font-weight: bold;
+}
+
+.delete-group-button:hover {
+    background: var(--theme1-transparent);
+}
+
+@media only screen and (max-width: 500px) {
+    #new-group-form {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        grid-gap: 1rem;
+    }
+
+    #new-group-name {
+        margin: 0;
+    }
+}

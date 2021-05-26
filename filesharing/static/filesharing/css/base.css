@@ -4,6 +4,7 @@
     --bg3: #050301;
     --theme1: #f05e23;
     --theme2: #b80201;
+    --theme1-transparent: rgba(240, 94, 35, 0.5);
     --theme2-transparent: rgba(184, 2, 1, 0.5);
     --dark1: #212121;
 }
