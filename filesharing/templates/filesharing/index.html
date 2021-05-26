@@ -53,10 +53,10 @@
     <section>
       <h2># Available files</h2>
 
-      <form method="post" action="{% url 'filesharing:search' %}">
+      <form id="search-form" method="post" action="{% url 'filesharing:search' %}">
         {% csrf_token %}
         <label for="search">Search by name:</label>
-        <input type="text" name="search">
+        <input class="search-bar" type="text" name="search">
         <input class="submit-button" type="submit" value="Search">
       </form>
 

@@ -27,6 +27,17 @@ section {
     font-size: 1.1em;
 }
 
+#search-form label {
+    font-size: 1.1em;
+}
+
+.search-bar {
+    border-radius: 5px;
+    font-size: 1.1em;
+    height: 1rem;
+    padding: .3rem;
+}
+
 .file-list {
     padding: 0;
     list-style-type: none;
@@ -37,7 +48,7 @@ section {
     display: grid;
     grid-template-columns: 75% 12.5% 6.25% 6.25%;
     align-items: center;
-    padding: .1rem .5rem;
+    padding: .1rem auto;
     margin-top: .5rem;
 }
 
@@ -215,6 +226,12 @@ section {
 
 @media only screen and (max-width: 500px) {
     #upload-form {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        grid-gap: 1rem;
+    }
+
+    #search-form {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
         grid-gap: 1rem;
