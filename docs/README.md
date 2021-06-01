@@ -5,4 +5,4 @@ This directory contains documentation for the project.
 ## Index
 
 - [API Guide](api.md)
-- [Deployment Guide](deployment.md)
+- [Deployment Guide](deployment.md) - How to deploy this app yourself
