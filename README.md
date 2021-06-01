@@ -11,6 +11,7 @@ upload files and share them with otter [*sic*] users you trust.
 - Privacy control
 - File search
 - File organization with tags
+- Clean, responsive interface
 
 ## Quick start
 
