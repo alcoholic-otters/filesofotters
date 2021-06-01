@@ -1,7 +1,7 @@
 # Files of Otters
 
 **Files of Otters** is a file-sharing system, a web app which allows you to
-upload files and share them with otter [*sic*] users to trust.
+upload files and share them with otter [*sic*] users you trust.
 
 ![The main screen of the app in use](docs/img/main-screen.png)
 
