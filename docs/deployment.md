@@ -78,12 +78,15 @@ If something is unclear, these tutorials might help:
 
 1. **Configure your server**
 
-    In the `fielsofotters/settings.py` file, replace the `AWS_S3_REGION_NAME`
+    In the `filesofotters/settings.py` file, replace the `AWS_S3_REGION_NAME`
     field to the region where you created your S3 bucket. You can find the short
     name of each region [here](
     https://docs.aws.amazon.com/general/latest/gr/s3.html).
 
     For security, you should also change the `SECRET_KEY` field in this file.
+
+    Replace the `bucket_name` field of the `FileStorage` class in the
+    `filesharing/file_storage.py` file with the name you gave your bucket.
 
     Then follow **step 4** from [this tutorial][aws-django-lightsail-tutorial].
 
